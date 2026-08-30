@@ -1,0 +1,16 @@
+Como tema do projeto, escolhemos implementar uma fábrica de cosméticos chamada ScentWare. 
+Aqui produzimos, atualmente, hidratante corporal e esfoliante. Chegamos a essa escolha em 
+conjunto dada a diversidade de produtos que podemos produzir, e também por ser um ramo de 
+produtos bem presente no nosso dia a dia. Além disso, parece ser um tema único na nossa turma,
+o que fará com que nosso projeto se destacaque. 
+
+Metas para os próximos laboratórios: 
+
+1 - Adcionaremos novos produtos como creme de mãos e linha de produtos para diferentes 
+públicos.
+
+2 - Para atender a diversidade de produtos introduziremos novas matérias primas. 
+
+3 - Estudaremos a possiblidade de introduzir uma nova etapa na planta para o armazenamento 
+e otransporte de nosso produtos da fábrica até lojas parceiras, dando prioridade para os 
+produtos mais próximos da data de validade.
