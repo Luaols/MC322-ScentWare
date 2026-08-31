@@ -1,17 +1,17 @@
 public class Maquina {
-    // Atributos
+    //atributos
     private String nome;
     private boolean ligada;
     private double capacidadeMaxima;
 
-    //Constructor
+    //constructor
     public Maquina(String nome, double capacidadeMaxima) {
         this.nome = nome;
         this.capacidadeMaxima = capacidadeMaxima;
         this.ligada = false;
     }
 
-    //Métodos
+    //métodos
     public void ligar() {
         ligada = true;
     }
@@ -28,15 +28,14 @@ public class Maquina {
         return (demanda <= capacidadeMaxima);
     }
 
-    //Processamento
-    public boolean processar(
-        MateriaPrima[] materiasPrimas,
-        double[] demandas,
-        Produto produto
-    ) {
+    //processamento
+    public boolean processar(Produto produto, int quantidade) {
         if (!ligada) {
             return false;
         }
+
+        MateriaPrima[] materiasPrimas = produto.getMateriasPrimasNecessarias();
+        double[] demandas = produto.getDemandasMateriasPrimas();
 
         if(materiasPrimas.length != demandas.length) {
             return false;
@@ -45,22 +44,24 @@ public class Maquina {
         /* verifica se a máquina tem capacidade p/ demanda */
         double demandaTotal = 0;
         for(int i=0; i< demandas.length; i++) {
-            demandaTotal += demandas[i];
+            demandaTotal += demandas[i] * quantidade;
         }
         if(!verificarCapacidade(demandaTotal)) {
             return false;
         }
 
-        /* verifica se temos disponibilidade de matéria prima */
-        for(int i=0; i < materiasPrimas.length; i++) {
-            if (!materiasPrimas[i].verificarDisponibilidade(demandas[i])) {
+        /* verifica se temos disponibilidade de todas as matéria prima */
+        for (int i = 0; i < materiasPrimas.length; i++) {
+            double demanda = demandas[i] * quantidade;
+            if (!materiasPrimas[i].verificarDisponibilidade(demanda)) {
                 return false;
             }
         }
 
         /* consome as matérias primas do estoque */
         for (int i = 0; i < materiasPrimas.length; i++) {
-            materiasPrimas[i].consumir(demandas[i]);
+            double demanda = demandas[i] * quantidade;
+            materiasPrimas[i].consumir(demanda);
         }
 
         produto.processar();
