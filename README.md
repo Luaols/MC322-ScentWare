@@ -1,8 +1,8 @@
 # ScentWare
 
-Sistema desenvolvido para a Tarefa 1 da disciplina MC322 - Programação Orientada a Objetos, da Universidade Estadual de Campinas (UNICAMP).
+Sistema desenvolvido para a disciplina MC322 - Programação Orientada a Objetos, da Universidade Estadual de Campinas (UNICAMP). Atualmente está na sua V1.
 
-A ScentWare é uma fábrica de cosméticos corporais que criamos para simular, de forma simples, o processo de produção de produtos como hidratantes e esfoliantes, desde o uso das matérias-primas até o processamento e a inspeção final.
+A ScentWare é uma fábrica de cosméticos corporais que criamos para simular, de forma simples, o processo de produção de produtos como hidratantes e esfoliantes, desde o uso das matérias-primas até a inspeção final.
 
 ## Produtos
 
@@ -24,6 +24,14 @@ A primeira versão da ScentWare é composta por:
 - homogeneizador (mistura as matérias-primas e faz o produto);
 - estação de inspeção;
 - sistema de interação via terminal (scanner).
+
+## Fluxo de produção
+
+A produção na ScentWare segue o seguinte fluxo:
+
+`Estoque → Esteira → Homogeneizador → Esteira → Controle de Qualidade → Produto Final`
+
+Antes de iniciar uma produção, o sistema verifica se há quantidade suficiente de todas as matérias-primas necessárias para o produto escolhido. Os ingredientes são transportados individualmente até o homogeneizador e, após o processamento, o produto final segue pela esteira até a estação de inspeção.
 
 ## Execução
 
