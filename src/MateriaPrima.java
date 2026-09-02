@@ -32,7 +32,7 @@ public class MateriaPrima {
         return (quantidade >= demanda);
     }
     public boolean ultrapassaQuantidadeMinima(double demanda) {
-        return ((quantidade-demanda)<quantidadeMinima); 
+        return ((quantidade-demanda) < quantidadeMinima); 
     }
     public String getNome(){
         return nome;

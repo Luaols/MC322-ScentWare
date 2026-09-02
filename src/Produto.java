@@ -3,21 +3,18 @@ public class Produto {
     private String id;
     private String nome;
     private String status;
-    private MateriaPrima[] materiasPrimasNecessarias;
-    private double[] demandasMateriasPrimas;
+    private double quantidadeMateriaPrimaNecessaria;
 
     //constructor
     public Produto(
         String id,
         String nome,
-        MateriaPrima[] materiasPrimasNecessarias,
-        double[] demandasMateriasPrimas
+        double quantidadeMateriaPrimaNecessaria
     ) {
         this.id = id;
         this.nome = nome;
         this.status = "AGUARDANDO PROCESSAMENTO";
-        this.materiasPrimasNecessarias = materiasPrimasNecessarias;
-        this.demandasMateriasPrimas = demandasMateriasPrimas;
+        this.quantidadeMateriaPrimaNecessaria = quantidadeMateriaPrimaNecessaria;
     }
 
     //métodos
@@ -29,12 +26,12 @@ public class Produto {
         this.status = "INSPECIONADO";
     }
 
-     public MateriaPrima[] getMateriasPrimasNecessarias() {
-        return materiasPrimasNecessarias;
+    public void definirDemandaMateriaPrima(double demanda) {
+        this.quantidadeMateriaPrimaNecessaria = demanda;
     }
 
-    public double[] getDemandasMateriasPrimas() {
-        return demandasMateriasPrimas;
+    public double getDemandaMateriaPrima() {
+        return quantidadeMateriaPrimaNecessaria;
     }
 
     public String getId(){

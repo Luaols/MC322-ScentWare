@@ -29,41 +29,32 @@ public class Maquina {
     }
 
     //processamento
-    public boolean processar(Produto produto, int quantidade) {
+    public boolean processar(
+        MateriaPrima materiaPrima,
+        Produto produto,
+        double demanda
+    ){
         if (!ligada) {
             return false;
         }
 
-        MateriaPrima[] materiasPrimas = produto.getMateriasPrimasNecessarias();
-        double[] demandas = produto.getDemandasMateriasPrimas();
-
-        if(materiasPrimas.length != demandas.length) {
-            return false;
-        }
-        
         /* verifica se a máquina tem capacidade p/ demanda */
-        double demandaTotal = 0;
-        for(int i=0; i< demandas.length; i++) {
-            demandaTotal += demandas[i] * quantidade;
-        }
-        if(!verificarCapacidade(demandaTotal)) {
+        if (!verificarCapacidade(demanda)) {
             return false;
         }
 
-        /* verifica se temos disponibilidade de todas as matéria prima */
-        for (int i = 0; i < materiasPrimas.length; i++) {
-            double demanda = demandas[i] * quantidade;
-            if (!materiasPrimas[i].verificarDisponibilidade(demanda)) {
-                return false;
-            }
+        /* verifica se temos disponibilidade matéria prima */
+        if (!materiaPrima.verificarDisponibilidade(demanda)) {
+            return false;
         }
 
-        /* consome as matérias primas do estoque */
-        for (int i = 0; i < materiasPrimas.length; i++) {
-            double demanda = demandas[i] * quantidade;
-            materiasPrimas[i].consumir(demanda);
+        /* não consumir abaixo do estoque mínimo*/
+        if (materiaPrima.ultrapassaQuantidadeMinima(demanda)) {
+            return false;
         }
 
+        /* consome matérias prima do estoque */
+        materiaPrima.consumir(demanda);
         produto.processar();
 
         return true;

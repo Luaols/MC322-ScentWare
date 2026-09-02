@@ -29,6 +29,10 @@ public class EstacaoInspecao {
             return false;
         }
 
+        if (!produto.getStatus().equals("PROCESSADO")) {
+            return false;
+        }
+
         produto.inspecionar();
         produtosInspecionados++;
 
