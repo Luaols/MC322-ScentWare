@@ -1,10 +1,10 @@
 JUSTIFICATIVA DA ESCOLHA DO TEMA
 
-Como tema do projeto, escolhemos desenvolver a ScentWare, uma fábrica de cosméticos corporais. Atualmente, nossa fábrica produz hidratante
-e esfoliante corporal, utilizando óleo de amêndoas, essência de baunilha e açúcar como matérias-primas.
+Como tema do projeto, escolhemos desenvolver a ScentWare, uma fábrica de cosméticos corporais. Atualmente, nossa fábrica produz hidratante, 
+utilizando óleo de amêndoas, como matéria-prima.
 
 Escolhemos esse tema porque cosméticos fazem parte do nosso dia a dia e também oferecem bastante espaço para expandir a fábrica nas próximas
-tarefas. Mesmo começando com apenas dois produtos, já conseguimos trabalhar com receitas diferentes e matérias-primas compartilhadas.
+tarefas. 
 
 Outro motivo foi trazer um pouco da nossa personalidade para o projeto. Somos duas meninas em uma turma majoritariamente masculina e gostamos da
 ideia de trabalhar com um tema que talvez não fosse uma escolha tão óbvia para a disciplina, sem deixar de ser um problema interessante de

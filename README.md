@@ -2,18 +2,15 @@
 
 Sistema desenvolvido para a disciplina MC322 - Programação Orientada a Objetos, da Universidade Estadual de Campinas (UNICAMP). Atualmente está na sua V1.
 
-A ScentWare é uma fábrica de cosméticos corporais que criamos para simular, de forma simples, o processo de produção de produtos como hidratantes e esfoliantes, desde o uso das matérias-primas até a inspeção final.
+A ScentWare é uma fábrica de cosméticos corporais que criamos para simular, de forma simples, o processo de produção de produtos, desde o uso das matérias-primas até a inspeção final.
 
 ## Produtos
 
 - Hidratante corporal
-- Esfoliante corporal
 
 ## Matérias-primas
 
 - Óleo de amêndoas
-- Essência de baunilha
-- Açúcar
 
 ## Estrutura da planta
 

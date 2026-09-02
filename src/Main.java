@@ -13,27 +13,11 @@ public class Main {
             "mL",
             100.0
         );
-        MateriaPrima essenciaBaunilha = new MateriaPrima(
-            "MP002",
-            "Essência de Baunilha",
-            150.0,
-            "mL",
-            30.0
-        );
-        MateriaPrima acucar = new MateriaPrima(
-            "MP003",
-            "Açúcar",
-            1000.0,
-            "g",
-            200.0
-        );
-        MateriaPrima[] estoque = {oleoAmendoas, essenciaBaunilha, acucar};
+        MateriaPrima[] estoque = {oleoAmendoas};
 
         /* Arrays para servir de "receita": matérias e demandas por produto */
-        MateriaPrima[] materiasHidratante = {oleoAmendoas, essenciaBaunilha};
-        double[] demandasHidratante = {30.0, 5.0};
-        MateriaPrima[] materiasEsfoliante = {oleoAmendoas, essenciaBaunilha, acucar};
-        double[] demandasEsfoliante = {20.0, 5.0, 50.0};
+        MateriaPrima[] materiasHidratante = {oleoAmendoas};
+        double[] demandasHidratante = {30.0};
 
         /* Instância dos produtos */
         Produto hidratante = new Produto(
@@ -42,13 +26,7 @@ public class Main {
             materiasHidratante,
             demandasHidratante
         );
-        Produto esfoliante = new Produto(
-            "P002",
-            "Esfoliante Corporal",
-            materiasEsfoliante,
-            demandasEsfoliante
-        );
-
+       
         /* Instância dos equipamentos e scanner */
         Esteira esteira = new Esteira(100.0);
         Maquina homogeneizador = new Maquina("Homogeneizador M-01", 100.0);
@@ -71,7 +49,6 @@ public class Main {
                 iniciarProducao(
                     scanner,
                     hidratante,
-                    esfoliante,
                     homogeneizador,
                     esteira,
                     estacaoInspecao
@@ -105,7 +82,7 @@ public class Main {
     /* Método para exibir uma tela de introdução quando inciarmos */
     private static void exibirIntroducao() {
         System.out.println("===============================================================");
-        System.out.println("                        SCENTWARE");
+        System.out.println("                         SCENTWARE");
         System.out.println("                 Cuidar de você é Essencial       ");
         System.out.println("               Cuidar da sua pele é ScentWare      ");
         System.out.println("===============================================================");
@@ -117,10 +94,6 @@ public class Main {
         System.out.println("Produtos:");
         System.out.println("[01] Hidratante corporal");
         System.out.println(" - Evita ressecamento, irritações e melhora o aspecto da pele");
-        System.out.println(" - Composição: Óleo de amêndoas | Essência de baunilha");
-        System.out.println("[02] Esfoliante corporal");
-        System.out.println(" - Evita pelos encravados, acne e deixa a pele mais macia");
-        System.out.println(" - Composição: Óleo de amêndoas | Essência de baunilha | Açúcar");
         System.out.println();
         System.out.println("Desenvolvido por: Luana e Roberta");
         System.out.println("===============================================================");
@@ -198,7 +171,6 @@ public class Main {
     private static void iniciarProducao(
         Scanner scanner,
         Produto hidratante,
-        Produto esfoliante,
         Maquina homogeneizador,
         Esteira esteira,
         EstacaoInspecao estacaoInspecao
@@ -209,23 +181,21 @@ public class Main {
         System.out.println("              NOVA PRODUÇÃO");
         System.out.println("==============================================");
         System.out.println("1 - " + hidratante.getNome());
-        System.out.println("2 - " + esfoliante.getNome());
         System.out.println("----------------------------------------------");
 
         boolean execucao = true;
         int escolhaProduto = 0;
         while(execucao) {
             escolhaProduto = lerInteiro(scanner, "Selecione o produto: ");
-            if (1 <= escolhaProduto && escolhaProduto <= 2) {
+            if (escolhaProduto==1) {
                 execucao = false;
             } else {
-                System.out.println("Inválido. Escolha um número entre 1 e 2.");
+                System.out.println("Inválido.");
             }
         }
 
         Produto produtoSelecionado;
         if (escolhaProduto == 1) { produtoSelecionado = hidratante; }
-        else if (escolhaProduto == 2) { produtoSelecionado = esfoliante; }
         else {
             System.out.println("Produto inválido.");
             return;
@@ -252,6 +222,15 @@ public class Main {
                 System.out.println();
                 System.out.println("Necessário: " + demandasTotais[i]);
                 System.out.println("Disponível: " + materiasPrimas[i].getQuantidade());
+                return;
+            }
+            if (materiasPrimas[i].ultrapassaQuantidadeMinima(demandasTotais[i])){
+                System.out.println();
+                System.out.println("[PRODUÇÃO INTERROMPIDA]");
+                System.out.println("Prosseguir com a operação comprometerá o estoque mínimo de " + materiasPrimas[i].getNome());
+                System.out.println("Necessário: " + demandasTotais[i]);
+                System.out.println("Disponível: " + materiasPrimas[i].getQuantidade());
+                System.out.println("Mínimo: " + materiasPrimas[i].getQuantidadeMinima());
                 return;
             }
         }

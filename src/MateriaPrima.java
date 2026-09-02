@@ -31,8 +31,8 @@ public class MateriaPrima {
     public boolean verificarDisponibilidade(double demanda){
         return (quantidade >= demanda);
     }
-    public boolean estaAbaixoDoMinimo() {
-        return (quantidade <= quantidadeMinima);
+    public boolean ultrapassaQuantidadeMinima(double demanda) {
+        return ((quantidade-demanda)<quantidadeMinima); 
     }
     public String getNome(){
         return nome;
@@ -45,5 +45,8 @@ public class MateriaPrima {
     }
     public String getUnidade() {
         return unidade;
+    }
+    public double getQuantidadeMinima(){
+        return quantidadeMinima;
     }
 }
