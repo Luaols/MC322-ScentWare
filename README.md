@@ -38,3 +38,10 @@ Antes de iniciar uma produção, o sistema verifica se há quantidade suficiente
 ```bash
 javac -d bin $(find src -name "*.java")
 java -cp bin Main
+```
+
+ou
+
+```bash
+rm -rf bin/* && javac -d bin src/*.java && java -cp bin Main
+```
