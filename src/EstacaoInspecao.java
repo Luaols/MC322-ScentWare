@@ -1,5 +1,3 @@
-/* Essa classe realiza uma inspeção simples nos produtos fabricados. */
-
 public class EstacaoInspecao {
     //atributos
     private boolean ativa;

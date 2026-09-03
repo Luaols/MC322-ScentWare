@@ -46,9 +46,12 @@ Também pretendemos evoluir a organização e a rastreabilidade do sistema. Nas 
 de falha, registrar eventos importantes da produção e facilitar o acompanhamento do caminho de cada produto pela fábrica. Com o crescimento
 do projeto, também será necessário reorganizar algumas responsabilidades para evitar que o Main concentre lógica demais.
 
-Por fim, pensamos em adicionar uma etapa após a produção para armazenamento e distribuição. Os produtos finalizados poderiam ser
+Pensamos também em adicionar uma etapa após a produção para armazenamento e distribuição. Os produtos finalizados poderiam ser
 organizados em estoque e posteriormente enviados para lojas parceiras, levando em consideração quantidade disponível, lote, validade,
 demanda, etc.
+
+Por fim, queriamos organizar o código e deixá-lo mais completo e organizado. Um ponto, por exemplo, seria adicionar, no começo de cada classe,
+informações padronizadas e relevantes sobre ela e o projeto, deixando-o mais legível futuramente para quem nunca teve contato com o projeto.
 
 A intenção é que a ScentWare cresça junto com as próximas tarefas da disciplina, aproveitando a estrutura inicial da fábrica sem precisar
 recomeçar a modelagem a cada nova funcionalidade.

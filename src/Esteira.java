@@ -1,6 +1,3 @@
-/* Essa classe é responsável por transportar a matéria prima
-até o homogeneizador e o produto até a inspeção */
-
 public class Esteira {
     //atributos
     private Object item;
