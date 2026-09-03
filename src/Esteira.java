@@ -53,6 +53,9 @@ public class Esteira {
         item = novoItem;
         return true;
     }
+    public double getCapacidadeMaxima() {
+        return capacidadeMaxima;
+    }
 
     public Object removerItem() {
         if (emMovimento) {

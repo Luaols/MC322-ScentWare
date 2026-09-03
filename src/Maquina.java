@@ -27,6 +27,9 @@ public class Maquina {
     public boolean verificarCapacidade(double demanda) {
         return (demanda <= capacidadeMaxima);
     }
+    public double getCapacidadeMaxima() {
+        return capacidadeMaxima;
+    }
 
     //processamento
     public boolean processar(

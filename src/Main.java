@@ -22,8 +22,8 @@ public class Main {
         );
        
         /* Instância dos equipamentos e scanner */
-        Esteira esteira = new Esteira(100.0);
-        Maquina homogeneizador = new Maquina("Homogeneizador M-01", 100.0);
+        Esteira esteira = new Esteira(300.0);
+        Maquina homogeneizador = new Maquina("Homogeneizador M-01", 200.0);
         EstacaoInspecao estacaoInspecao = new EstacaoInspecao();
 
         Scanner scanner = new Scanner(System.in);
@@ -56,6 +56,10 @@ public class Main {
                 adicionarMateria(scanner, oleoAmendoas);
             }
             else if (opcao == 4) {
+                System.out.println();
+                System.out.println("Encerrando a ScentWare...");
+                System.out.println("Até a próxima! :)");
+                System.out.println("===============================================================");
                 execucao = false;
             }
         }
@@ -64,6 +68,7 @@ public class Main {
 
     /* Método de exibição de um menu que possibilita o usuário escolher uma ação */
     private static void exibirMenu() {
+        System.out.println("===============================================================");
         System.out.println("==============================================");
         System.out.println("               MENU PRINCIPAL");
         System.out.println("==============================================");
@@ -111,8 +116,6 @@ public class Main {
         );
         
         System.out.println();
-        System.out.println("===============================================================");
-        System.out.println();
     }
 
     /* Método de exibição para a opção de reabastecer o estoque */
@@ -135,8 +138,6 @@ public class Main {
         System.out.println();
         System.out.println("[OK] Estoque de " + materiaPrima.getNome() + " atualizado.");
         System.out.println("Novo estoque: " + materiaPrima.getQuantidade() + " " + materiaPrima.getUnidade());
-        System.out.println();
-        System.out.println("===============================================================");
         System.out.println();
     }
 
@@ -169,6 +170,15 @@ public class Main {
         }
 
         Produto produtoSelecionado = hidratante;
+
+        /* informações úteis antes da produção */
+        System.out.println();
+        System.out.println("Informações da produção:");
+        System.out.println("Estoque disponível: " + oleoAmendoas.getQuantidade() + " " + oleoAmendoas.getUnidade());
+        System.out.println("Estoque mínimo: " + oleoAmendoas.getQuantidadeMinima() + " " + oleoAmendoas.getUnidade());
+        System.out.println("Capacidade da esteira: " + esteira.getCapacidadeMaxima() + "" +  oleoAmendoas.getUnidade());
+        System.out.println("Capacidade do " + homogeneizador.getNome() + ": )" + homogeneizador.getCapacidadeMaxima() + " " + oleoAmendoas.getUnidade());
+        System.out.println();
 
         /* selecionar a demanda de matéria-prima a ser produzida */
         double demanda = lerDoublePositivo(scanner, "Informe a demanda de matéria-prima (mL): ");
@@ -264,6 +274,10 @@ public class Main {
 
         /* inspeção do produto */
         estacaoInspecao.ativar();
+
+        System.out.println();
+        System.out.println("[CQ-01] Controle de Qualidade ativado.");
+
         boolean inspecionado = estacaoInspecao.inspecionar(produtoSelecionado);
         estacaoInspecao.desativar();
 
@@ -271,6 +285,7 @@ public class Main {
             System.out.println("[CQ-01] Não foi possível realizar a inspeção.");
             return;
         }
+        System.out.println("[CQ-01] " + produtoSelecionado.getNome() + " aprovado na inspeção.");
 
         System.out.println();
         System.out.println("==============================================");
@@ -279,10 +294,9 @@ public class Main {
         System.out.println("Produto: " + produtoSelecionado.getId() + " " + produtoSelecionado.getNome());
         System.out.println("Matéria-prima utilizada: " + oleoAmendoas.getId() + " - "+ oleoAmendoas.getNome());
         System.out.println("Demanda processada: " + demanda + " " + oleoAmendoas.getUnidade());
+        System.out.println("Estoque restante: " + oleoAmendoas.getQuantidade() + " " + oleoAmendoas.getUnidade());
         System.out.println("Status: " + produtoSelecionado.getStatus());
         System.out.println("Controle de Qualidade: APROVADO");
-        System.out.println();
-        System.out.println("===============================================================");
         System.out.println();
     }
 
