@@ -24,6 +24,12 @@ VISÃO DE EXPANSÃO FUTURA
 Nos próximos laboratórios, queremos expandir a ScentWare aos poucos, acompanhando os novos conceitos apresentados na disciplina e mantendo
 a ideia de uma fábrica de cosméticos corporais cada vez mais completa.
 
+Uma expansão importante será tornar a relação entre produtos e matérias-primas mais completa. Nesta primeira versão, seguindo a proposta
+simplificada do laboratório e trabalhamos com um único produto associado a uma única matéria-prima, até mesmo para não fugir dos critérios
+de correção. Futuramente, queremos permitir que cada produto possua sua própria receita, formada por diferentes matérias-primas e quantidades
+fixas de cada uma. Assim, um hidratante poderia utilizar óleo de amêndoas e essência, enquanto um esfoliante acrescentaria também um
+agente esfoliante, por exemplo. A demanda total de cada ingrediente poderia então ser calculada de acordo com a quantidade de produtos a ser fabricada.
+
 Uma das primeiras expansões que pensamos é aumentar o catálogo de produtos, incluindo itens como creme para as mãos, óleo corporal,
 body splash e linhas com diferentes propostas de cuidado. Isso também exigiria a inclusão de novas matérias-primas, receitas e classes.
 
