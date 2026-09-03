@@ -18,7 +18,7 @@ A primeira versão da ScentWare é composta por:
 
 - estoque de matérias-primas;
 - esteira de transporte;
-- homogeneizador (mistura as matérias-primas e faz o produto);
+- homogeneizador (transforma matéria prima em produto);
 - estação de inspeção;
 - sistema de interação via terminal (scanner).
 
@@ -28,7 +28,7 @@ A produção na ScentWare segue o seguinte fluxo:
 
 `Estoque → Esteira → Homogeneizador → Esteira → Controle de Qualidade → Produto Final`
 
-Antes de iniciar uma produção, o sistema verifica se há quantidade suficiente de todas as matérias-primas necessárias para o produto escolhido. Os ingredientes são transportados individualmente até o homogeneizador e, após o processamento, o produto final segue pela esteira até a estação de inspeção.
+Antes de iniciar uma produção, o sistema verifica se há quantidade suficiente de matérias prima necessária para o produto escolhido. Os ingredientes são transportados individualmente até o homogeneizador (na v1 temos apenas 1 produto) e, após o processamento, o produto final segue pela esteira até a estação de inspeção.
 
 ## Execução
 
