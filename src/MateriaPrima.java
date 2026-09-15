@@ -5,6 +5,7 @@ public class MateriaPrima {
     private double quantidade;
     private String unidade;
     private double quantidadeMinima;
+    private double custoPorUnidade;
 
     //constructor
     public MateriaPrima(
@@ -12,13 +13,15 @@ public class MateriaPrima {
         String nome,
         double quantidade,
         String unidade,
-        double quantidadeMinima
+        double quantidadeMinima,
+        double custoPorUnidade
     ) {
         this.id = id;
         this.nome = nome;
         this.quantidade = quantidade;
         this.unidade = unidade;
         this.quantidadeMinima = quantidadeMinima;
+        this.custoPorUnidade = custoPorUnidade;
     }
 
     //métodos
@@ -48,5 +51,8 @@ public class MateriaPrima {
     }
     public double getQuantidadeMinima(){
         return quantidadeMinima;
+    }
+    public double getCustoPorunidade(){
+        return custoPorUnidade;
     }
 }
