@@ -11,21 +11,38 @@ public class Main {
             "Óleo de Amêndoas",
             500.0,
             "mL",
-            100.0
+            100.0,
+            0.05
         );
 
         /* Instância dos produtos */
-        Produto hidratante = new Produto(
+        ProdutoHidratante hidratante = new ProdutoHidratante(
             "P001",
             "Hidratante Corporal",
-            30.0
+            30.0,
+            0.5
         );
-       
+        ProdutoCremeDeMaos cremecemaos = new ProdutoCremeDeMaos(
+            "P002",
+            "Creme de mãos",
+            35.0,
+            0.7
+        );
+        ProdutoEsfoliante esfoliante = new ProdutoEsfoliante(
+            "P003",
+            "Esfoliante",
+            40.0,
+            0.9
+        );
+        /* Instância das máquinas */
+        MaquinaHomogeneizador homogeneizador = new MaquinaHomogeneizador("Homogeneizador M-01", 100.0, 0.20, 0.2);
+        MaquinaEmbalagem maquinaEmbalagem = new MaquinaEmbalagem("Máquina de embalagem M-02", 50, 0.20, 0.3 );
+        MaquinaInspecao maquinaInspecao = new MaquinaInspecao("Máquina de inspeção M-03", 60, 0.15, 0.4);
+
         /* Instância dos equipamentos e scanner */
         Esteira esteira = new Esteira(300.0);
-        Maquina homogeneizador = new Maquina("Homogeneizador M-01", 200.0);
         EstacaoInspecao estacaoInspecao = new EstacaoInspecao();
-
+        Gerenciadorproducao gerenciadorProducao = new Gerenciadorproducao(1000);
         Scanner scanner = new Scanner(System.in);
 
         /* ======================== MENU - AÇÕES ========================= */
@@ -94,7 +111,13 @@ public class Main {
         System.out.println("Produtos:");
         System.out.println("[01] Hidratante corporal");
         System.out.println(" - Evita ressecamento, irritações e melhora o aspecto da pele");
-        System.out.println(" - Matéria-prima principal: Óleo de Amêndoas");
+        System.out.println("[02] Creme de mãos");
+        System.out.println(" - Hidrata profundamente e protege a barreira cutânea da pele");
+        System.out.println("[03] Esfoliante");
+        System.out.println(" - Evita pelos encravados, acne e deixa a pele mais macia");
+        System.out.println();
+        System.out.println("Matérias Primas:");
+        System.out.println("[01] Óleo de amêndoas");
         System.out.println();
         System.out.println("Desenvolvido por: Luana Oliveira e Roberta Santos");
         System.out.println("===============================================================");
@@ -132,8 +155,13 @@ public class Main {
          System.out.println("Matéria-prima: " + materiaPrima.getNome());
 
         double quantidade = lerDoublePositivo(scanner, "Quantidade a adicionar: ");
+        double custo = materiaPrima.getCustoPorunidade()*quantidade;
 
+        if (custo <= gerenciadorProducao.getBudget())
+            {
+        gerenciadorProducao.comprarMateriaPrima(custo);
         materiaPrima.adicionarEstoque(quantidade);
+        }
 
         System.out.println();
         System.out.println("[OK] Estoque de " + materiaPrima.getNome() + " atualizado.");
@@ -145,6 +173,8 @@ public class Main {
     private static void iniciarProducao(
         Scanner scanner,
         Produto hidratante,
+        Produto cremedemaos,
+        Produto esfoliante,
         MateriaPrima oleoAmendoas,
         Maquina homogeneizador,
         Esteira esteira,
@@ -156,20 +186,29 @@ public class Main {
         System.out.println("              NOVA PRODUÇÃO");
         System.out.println("==============================================");
         System.out.println("1 - " + hidratante.getNome());
+        System.out.println("2 - " + cremedemaos.getNome());
+        System.out.println("3 - " + esfoliante.getNome());
         System.out.println("----------------------------------------------");
 
         boolean execucao = true;
         int escolhaProduto = 0;
         while(execucao) {
             escolhaProduto = lerInteiro(scanner, "Selecione o produto: ");
-            if (escolhaProduto==1) {
+            if (1<=escolhaProduto && escolhaProduto<=3) {
                 execucao = false;
             } else {
-                System.out.println("Inválido.");
+                System.out.println("Inválido. Escolha um número entre 1 e 3.");
             }
         }
-
-        Produto produtoSelecionado = hidratante;
+        Produto produtoSelecionado;
+            if (escolhaProduto == 1) { produtoSelecionado = hidratante; }
+            else if (escolhaProduto == 2) { produtoSelecionado = cremedemaos; }
+            else if (escolhaProduto == 3) { produtoSelecionado = esfoliante; }
+            else {
+            System.out.println("Produto inválido.");
+            return;
+            }
+        
 
         /* informações úteis antes da produção */
         System.out.println();
