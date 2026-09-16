@@ -1,58 +1,59 @@
 public class MateriaPrima {
-    //atributos
     private String id;
     private String nome;
     private double quantidade;
     private String unidade;
-    private double quantidadeMinima;
     private double custoPorUnidade;
 
-    //constructor
     public MateriaPrima(
-        String id,
-        String nome,
-        double quantidade,
-        String unidade,
-        double quantidadeMinima,
-        double custoPorUnidade
+            String id,
+            String nome,
+            double quantidade,
+            String unidade,
+            double custoPorUnidade
     ) {
         this.id = id;
         this.nome = nome;
         this.quantidade = quantidade;
         this.unidade = unidade;
-        this.quantidadeMinima = quantidadeMinima;
         this.custoPorUnidade = custoPorUnidade;
     }
 
-    //métodos
-    public void consumir(double quantidade) {
-        this.quantidade = this.quantidade - quantidade;
+    public boolean consumir(double quantidade) {
+        if (verificarDisponibilidade(quantidade)) {
+            this.quantidade -= quantidade;
+            return true;
+        }
+        return false;
     }
+
     public void adicionarEstoque(double quantidade) {
-        this.quantidade = this.quantidade + quantidade;
+        if (quantidade > 0) {
+            this.quantidade += quantidade;
+        }
     }
-    public boolean verificarDisponibilidade(double demanda){
-        return (quantidade >= demanda);
+
+    public boolean verificarDisponibilidade(double quantidade) {
+        return quantidade > 0 && this.quantidade >= quantidade;
     }
-    public boolean ultrapassaQuantidadeMinima(double demanda) {
-        return ((quantidade-demanda) < quantidadeMinima); 
-    }
-    public String getNome(){
-        return nome;
-    }
-    public String getId(){
+
+    public String getId() {
         return id;
     }
-    public double getQuantidade(){
+
+    public String getNome() {
+        return nome;
+    }
+
+    public double getQuantidade() {
         return quantidade;
     }
+
     public String getUnidade() {
         return unidade;
     }
-    public double getQuantidadeMinima(){
-        return quantidadeMinima;
-    }
-    public double getCustoPorunidade(){
+
+    public double getCustoPorUnidade() {
         return custoPorUnidade;
     }
 }

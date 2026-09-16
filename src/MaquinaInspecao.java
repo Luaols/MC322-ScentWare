@@ -1,40 +1,44 @@
-public class MaquinaInspecao extends Maquina{
+import java.util.Random;
+
+public class MaquinaInspecao extends Maquina {
+    private Random random = new Random();
+
     public MaquinaInspecao(
-        String nome, 
-        double capacidadeMaxima, 
-        double probabilidadeFalha, 
-        double custoOperacao 
-    ){
+            String nome,
+            double capacidadeMaxima,
+            double probabilidadeFalha,
+            double custoOperacao
+    ) {
         super(nome, capacidadeMaxima, probabilidadeFalha, custoOperacao);
     }
 
-    @Override 
-    public boolean processar(
-        MateriaPrima materiaPrima,
-        Produto produto,
-        double demanda
-    ){
-        if (!estaLigada()) {
-            return false;
+    @Override
+    public boolean processar(Produto produto) {
+        ligar();
+
+        // A qualidade influencia diretamente a chance de rejeicao
+        // A probabilidade acumulada aumenta ainda mais essa chance
+        double chanceRejeicao = produto.getQualidade()
+                * (0.5 + 0.5 * produto.getProbabilidadeFalhaAcumulada());
+
+        boolean rejeitado = random.nextDouble() < chanceRejeicao;
+
+        // Se a propria maquina de inspecao falhar, o resultado da inspecao fica incorreto
+        if (verificarFalha()) {
+            rejeitado = !rejeitado;
+        }
+        if (rejeitado) {
+            produto.setStatus("Rejeitado");
+        } else {
+            produto.setStatus("Aprovado");
         }
 
-        /* verifica se a máquina tem capacidade p/ demanda */
-        if (!verificarCapacidade(demanda)) {
-            return false;
-        }
-
-        /*  A função verificarFalha retorna a probabilidade de falha ou 0, utilizando aleatoriedade para decidir o que será retornado*/
-        produto.aumentarProbabilidadeFalha(verificarFalha());
-        
-        /* verifica falha de operação */
-        if (verificar(falha) != 0){
-            return false;
-        }
-
-        produto.processar();
-
-        return true;
+        desligar();
+        return !rejeitado;
     }
 
-    
+    @Override
+    public String getTipo() {
+        return "Inspecao";
+    }
 }

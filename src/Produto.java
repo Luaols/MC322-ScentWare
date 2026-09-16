@@ -1,69 +1,72 @@
 public abstract class Produto {
-    //atributos
     private String id;
     private String nome;
     private String status;
-    private double quantidadeMateriaPrimaNecessaria;
+    private double quantidadeMateriaPrimaPorUnidade;
     private double qualidade;
     private double probabilidadeFalhaAcumulada;
-    private double quantidadeMateriaPrimaPorUnidade;
-    private static int totalProdutosFabricados;
+    private static int totalProdutosFabricados = 0;
 
-    //constructor
     public Produto(
-        String nome,
-        double quantidadeMateriaPrimaNecessaria,
-        double qualidade
+            String id,
+            String nome,
+            double quantidadeMateriaPrimaPorUnidade,
+            double qualidade
     ) {
+        this.id = id;
         this.nome = nome;
-        this.status = "AGUARDANDO PROCESSAMENTO";
-        this.quantidadeMateriaPrimaNecessaria = quantidadeMateriaPrimaNecessaria;
+        this.status = "Pendente";
+        this.quantidadeMateriaPrimaPorUnidade = quantidadeMateriaPrimaPorUnidade;
         this.qualidade = qualidade;
-        this.probabilidadeFalhaAcumulada = 0;
-        this.totalProdutosFabricados = 0;
+        this.probabilidadeFalhaAcumulada = 0.0;
     }
 
-    //subclasses
-
-
-    //métodos abstratos
     public abstract void processar();
 
-    public abstract double calcularTempoProducao(double quantidadeProdutos);
+    public abstract double calcularTempoProducao();
 
     public abstract String getTipo();
 
-    //métodos concretos
-    public void inspecionar() {
-        this.status = "INSPECIONADO";
+    public String getId() {
+        return id;
     }
 
-    public void definirDemandaMateriaPrima(double demanda) {
-        this.quantidadeMateriaPrimaNecessaria = demanda;
+    public String getNome() {
+        return nome;
     }
 
-    public double getDemandaMateriaPrima() {
-        return quantidadeMateriaPrimaNecessaria;
+    public String getStatus() {
+        return status;
     }
 
-    public String getId(){
-        return (id);
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getNome(){
-        return(nome);
+    public double getQuantidadeMateriaPrimaPorUnidade() {
+        return quantidadeMateriaPrimaPorUnidade;
     }
-    
-    public String getStatus(){
-        return(status);
+
+    public double getQualidade() {
+        return qualidade;
     }
-    public void setStaus(String novo_status){
-        status = novo_status;
+
+    public double getProbabilidadeFalhaAcumulada() {
+        return probabilidadeFalhaAcumulada;
     }
-    public void aumentarProbabilidadeFalha(double aumento){
-        probabilidadeFalhaAcumulada = probabilidadeFalhaAcumulada + aumento;
+
+    public void aumentarProbabilidadeFalha(double aumento) {
+        probabilidadeFalhaAcumulada += aumento;
+        if (probabilidadeFalhaAcumulada > 1.0) {
+            probabilidadeFalhaAcumulada = 1.0;
+        }
     }
-    public double getQualidade(){
-        return(qualidade);
+
+    protected static void incrementarTotalProdutosFabricados() {
+        totalProdutosFabricados++;
+    }
+
+    public static int getTotalProdutosFabricados() {
+        return totalProdutosFabricados;
     }
 }

@@ -3,372 +3,294 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         exibirIntroducao();
-
-        /* ======================== INSTÂNCIAS ========================= */
-        /* Instância das matérias-primas */
-        MateriaPrima oleoAmendoas = new MateriaPrima(
-            "MP001",
-            "Óleo de Amêndoas",
-            500.0,
-            "mL",
-            100.0,
-            0.05
-        );
-
-        /* Instância dos produtos */
-        ProdutoHidratante hidratante = new ProdutoHidratante(
-            "P001",
-            "Hidratante Corporal",
-            30.0,
-            0.5
-        );
-        ProdutoCremeDeMaos cremecemaos = new ProdutoCremeDeMaos(
-            "P002",
-            "Creme de mãos",
-            35.0,
-            0.7
-        );
-        ProdutoEsfoliante esfoliante = new ProdutoEsfoliante(
-            "P003",
-            "Esfoliante",
-            40.0,
-            0.9
-        );
-        /* Instância das máquinas */
-        MaquinaHomogeneizador homogeneizador = new MaquinaHomogeneizador("Homogeneizador M-01", 100.0, 0.20, 0.2);
-        MaquinaEmbalagem maquinaEmbalagem = new MaquinaEmbalagem("Máquina de embalagem M-02", 50, 0.20, 0.3 );
-        MaquinaInspecao maquinaInspecao = new MaquinaInspecao("Máquina de inspeção M-03", 60, 0.15, 0.4);
-
-        /* Instância dos equipamentos e scanner */
-        Esteira esteira = new Esteira(300.0);
-        EstacaoInspecao estacaoInspecao = new EstacaoInspecao();
-        Gerenciadorproducao gerenciadorProducao = new Gerenciadorproducao(1000);
         Scanner scanner = new Scanner(System.in);
 
-        /* ======================== MENU - AÇÕES ========================= */
-        boolean execucao = true;
-        while (execucao) {
-            exibirMenu();
-            int opcao = lerInteiro(scanner, "Escolha: ");
+        // Materia-prima principal da fabrica
+        MateriaPrima oleoAmendoas = new MateriaPrima(
+                "MP001",
+                "Oleo de Amendoas",
+                1000.0,
+                "mL",
+                0.10
+        );
 
-            while (opcao < 1 || opcao > 4) {
-                System.out.println("Opção inválida. Escolha um número entre 1 e 4.");
-                opcao = lerInteiro(scanner,"Escolha: ");
+        // Produtos da ScentWare
+        Produto hidratante = new ProdutoHidratante(
+                "P001",
+                "Hidratante Corporal",
+                20.0
+        );
+
+        Produto cremeDeMaos = new ProdutoCremeDeMaos(
+                "P002",
+                "Creme de Maos",
+                30.0
+        );
+
+        Produto esfoliante = new ProdutoEsfoliante(
+                "P003",
+                "Esfoliante Corporal",
+                40.0
+        );
+
+        // Gerenciador da fabrica
+        GerenciadorProducao gerenciador = new GerenciadorProducao(
+                oleoAmendoas,
+                1000.0
+        );
+
+        // Demandas iniciais
+        gerenciador.registrarDemanda(new Demanda(hidratante.getTipo(), 0));
+        gerenciador.registrarDemanda(new Demanda(cremeDeMaos.getTipo(), 0));
+        gerenciador.registrarDemanda(new Demanda(esfoliante.getTipo(), 0));
+
+        // Maquinas da linha de producao
+        gerenciador.adicionarMaquina(
+                new MaquinaHomogeneizador(
+                        "Homogeneizador",
+                        1000.0,
+                        0.10,
+                        20.0
+                )
+        );
+
+        gerenciador.adicionarMaquina(
+                new MaquinaEmpacotadora(
+                        "Empacotadora",
+                        1000.0,
+                        0.05,
+                        10.0
+                )
+        );
+
+        gerenciador.adicionarMaquina(
+                new MaquinaInspecao(
+                        "Inspecao",
+                        1000.0,
+                        0.10,
+                        15.0
+                )
+        );
+
+        int opcao;
+
+        do {
+            exibirMenu(gerenciador);
+
+            System.out.print("Escolha uma opcao: ");
+            opcao = lerInteiro(scanner);
+
+            switch (opcao) {
+                case 1:
+                    atualizarDemanda(
+                            scanner,
+                            gerenciador,
+                            hidratante.getTipo()
+                    );
+                    break;
+                case 2:
+                    atualizarDemanda(
+                            scanner,
+                            gerenciador,
+                            cremeDeMaos.getTipo()
+                    );
+                    break;
+                case 3:
+                    atualizarDemanda(
+                            scanner,
+                            gerenciador,
+                            esfoliante.getTipo()
+                    );
+                    break;
+                case 4:
+                    fabricarProduto(
+                            gerenciador,
+                            hidratante
+                    );
+                    break;
+                case 5:
+                    fabricarProduto(
+                            gerenciador,
+                            cremeDeMaos
+                    );
+                    break;
+                case 6:
+                    fabricarProduto(
+                            gerenciador,
+                            esfoliante
+                    );
+                    break;
+                case 7:
+                    System.out.println("\n=== ARMAZEM ===");
+                    gerenciador.exibirArmazem();
+                    break;
+                case 8:
+                    exibirEstoque(gerenciador);
+                    break;
+                case 9:
+                    comprarMateriaPrima(
+                            scanner,
+                            gerenciador
+                    );
+                    break;
+                case 0:
+                    System.out.println("\nEncerrando a ScentWare...");
+                    System.out.println("Ate a proxima! :)");
+                    break;
+                default:
+                    System.out.println("\nOpcao invalida.");
             }
 
-            if (opcao == 1) {
-                iniciarProducao(
-                    scanner,
-                    hidratante,
-                    oleoAmendoas,
-                    homogeneizador,
-                    esteira,
-                    estacaoInspecao
-                );
-            }
-            else if (opcao == 2) {
-                exibirEstoque(oleoAmendoas);
-            }
-            else if (opcao == 3) {
-                adicionarMateria(scanner, oleoAmendoas);
-            }
-            else if (opcao == 4) {
-                System.out.println();
-                System.out.println("Encerrando a ScentWare...");
-                System.out.println("Até a próxima! :)");
-                System.out.println("===============================================================");
-                execucao = false;
-            }
-        }
+        } while (opcao != 0);
         scanner.close();
     }
 
-    /* Método de exibição de um menu que possibilita o usuário escolher uma ação */
-    private static void exibirMenu() {
-        System.out.println("===============================================================");
-        System.out.println("==============================================");
-        System.out.println("               MENU PRINCIPAL");
-        System.out.println("==============================================");
-        System.out.println("1 - Iniciar produção");
-        System.out.println("2 - Consultar estoque");
-        System.out.println("3 - Adicionar matéria-prima");
-        System.out.println("4 - Sair");
-        System.out.println("----------------------------------------------");
-    }
-
-    /* Método para exibir uma tela de introdução quando inciarmos */
     private static void exibirIntroducao() {
         System.out.println("===============================================================");
         System.out.println("                         SCENTWARE");
-        System.out.println("                 Cuidar de você é Essencial       ");
-        System.out.println("               Cuidar da sua pele é ScentWare      ");
+        System.out.println("                 Cuidar de voce e Essencial");
+        System.out.println("               Cuidar da sua pele e ScentWare");
         System.out.println("===============================================================");
-        System.out.println("Bem-vindos! Somos uma fábrica de cosméticos corporais.");
-        System.out.println();
-        System.out.println("Nossos produtos são desenvolvidos com muito carinho ");
-        System.out.println("e cuidado, estimulando autocuidado e bem-estar. ");
+        System.out.println("Bem-vindos! Somos uma fabrica de cosmeticos corporais.");
         System.out.println();
         System.out.println("Produtos:");
-        System.out.println("[01] Hidratante corporal");
-        System.out.println(" - Evita ressecamento, irritações e melhora o aspecto da pele");
-        System.out.println("[02] Creme de mãos");
-        System.out.println(" - Hidrata profundamente e protege a barreira cutânea da pele");
-        System.out.println("[03] Esfoliante");
-        System.out.println(" - Evita pelos encravados, acne e deixa a pele mais macia");
+        System.out.println("[01] Hidratante Corporal");
+        System.out.println("[02] Creme de Maos");
+        System.out.println("[03] Esfoliante Corporal");
         System.out.println();
-        System.out.println("Matérias Primas:");
-        System.out.println("[01] Óleo de amêndoas");
+        System.out.println("Materia-prima principal: Oleo de Amendoas");
         System.out.println();
         System.out.println("Desenvolvido por: Luana Oliveira e Roberta Santos");
         System.out.println("===============================================================");
         System.out.println();
     }
 
-    /* Método de exibição do estoque de cada uma das matérias-primas */
-    private static void exibirEstoque(MateriaPrima materiaPrima) {
-        System.out.println();
-        System.out.println("==============================================");
-        System.out.println("               ESTOQUE ATUAL");
-        System.out.println("==============================================");
+    private static void exibirMenu(GerenciadorProducao gerenciador) {
+        System.out.println("\n================================");
+        System.out.println("            SCENTWARE");
+        System.out.println("================================");
+        gerenciador.exibirBudget();
+        System.out.println("\nATUALIZAR DEMANDAS");
+        System.out.println("1 - Atualizar demanda de Hidratante");
+        System.out.println("2 - Atualizar demanda de Creme de Maos");
+        System.out.println("3 - Atualizar demanda de Esfoliante");
+        System.out.println("\nFABRICAR");
+        System.out.println("4 - Fabricar Hidratante");
+        System.out.println("5 - Fabricar Creme de Maos");
+        System.out.println("6 - Fabricar Esfoliante");
+        System.out.println("\nCONSULTAR");
+        System.out.println("7 - Ver armazem");
+        System.out.println("8 - Ver estoque de materia-prima");
+        System.out.println("\nCOMPRAR MATERIA-PRIMA");
+        System.out.println("9 - Comprar materia-prima");
+        System.out.println("\n0 - Sair");
+        System.out.println("================================");
+    }
+
+    private static void atualizarDemanda(
+            Scanner scanner,
+            GerenciadorProducao gerenciador,
+            String tipoProduto
+    ) {
+        System.out.print("\nInforme a quantidade de produtos: ");
+        int quantidade = lerInteiro(scanner);
+
+        if (gerenciador.atualizarDemanda(tipoProduto, quantidade)) {
+            System.out.println(
+                    "Demanda de " + tipoProduto
+                    + " atualizada para "
+                    + quantidade + " unidades."
+            );
+        } else {
+            System.out.println("Quantidade invalida para a demanda.");
+        }
+    }
+
+    private static void fabricarProduto(
+            GerenciadorProducao gerenciador,
+            Produto produto) {
+        System.out.println(
+                "\nIniciando producao de "
+                + produto.getNome() + "..."
+        );
+
+        gerenciador.fabricarDemanda(
+                produto.getTipo(),
+                produto
+        );
+    }
+
+    private static void exibirEstoque(GerenciadorProducao gerenciador) {
+        MateriaPrima materiaPrima = gerenciador.getMateriaPrima();
+
+        System.out.println("\n=== ESTOQUE DE MATERIA-PRIMA ===");
 
         System.out.println(
-            materiaPrima.getId() + " - "
-            + materiaPrima.getNome() + ": "
-            + materiaPrima.getQuantidade() + " "
-            + materiaPrima.getUnidade()
+                materiaPrima.getNome()
+                + ": "
+                + materiaPrima.getQuantidade()
+                + " "
+                + materiaPrima.getUnidade()
         );
-        
-        System.out.println();
+
+        System.out.printf(
+                "Custo por unidade: R$ %.2f%n",
+                materiaPrima.getCustoPorUnidade()
+        );
     }
 
-    /* Método de exibição para a opção de reabastecer o estoque */
-    private static void adicionarMateria(
-        Scanner scanner,
-        MateriaPrima materiaPrima
-    ) {
-        System.out.println();
-        System.out.println("==============================================");
-        System.out.println("             REABASTECER ESTOQUE");
-        System.out.println("==============================================");
+    private static void comprarMateriaPrima(Scanner scanner, GerenciadorProducao gerenciador) {
+        System.out.print(
+                "\nInforme a quantidade de materia-prima que deseja comprar: "
+        );
 
-        /* o usuário escolhe a quantidade de matérias-prima para abastecer */
-         System.out.println("Matéria-prima: " + materiaPrima.getNome());
+        double quantidade = lerDouble(scanner);
 
-        double quantidade = lerDoublePositivo(scanner, "Quantidade a adicionar: ");
-        double custo = materiaPrima.getCustoPorunidade()*quantidade;
+        double custo = quantidade * gerenciador.getMateriaPrima().getCustoPorUnidade();
 
-        if (custo <= gerenciadorProducao.getBudget())
-            {
-        gerenciadorProducao.comprarMateriaPrima(custo);
-        materiaPrima.adicionarEstoque(quantidade);
+        if (gerenciador.comprarMateriaPrima(quantidade)) {
+            System.out.printf(
+                    "Materia-prima comprada com sucesso. Custo: R$ %.2f%n",
+                    custo
+            );
+        } else {
+            System.out.println(
+                    "Nao foi possivel realizar a compra. Verifique a quantidade e o budget."
+            );
         }
-
-        System.out.println();
-        System.out.println("[OK] Estoque de " + materiaPrima.getNome() + " atualizado.");
-        System.out.println("Novo estoque: " + materiaPrima.getQuantidade() + " " + materiaPrima.getUnidade());
-        System.out.println();
     }
 
-    /* Método para iniciar a produção */
-    private static void iniciarProducao(
-        Scanner scanner,
-        Produto hidratante,
-        Produto cremedemaos,
-        Produto esfoliante,
-        MateriaPrima oleoAmendoas,
-        Maquina homogeneizador,
-        Esteira esteira,
-        EstacaoInspecao estacaoInspecao
-    ) {
-        /* seleciona o produto a ser produzido */
-        System.out.println();
-        System.out.println("==============================================");
-        System.out.println("              NOVA PRODUÇÃO");
-        System.out.println("==============================================");
-        System.out.println("1 - " + hidratante.getNome());
-        System.out.println("2 - " + cremedemaos.getNome());
-        System.out.println("3 - " + esfoliante.getNome());
-        System.out.println("----------------------------------------------");
-
-        boolean execucao = true;
-        int escolhaProduto = 0;
-        while(execucao) {
-            escolhaProduto = lerInteiro(scanner, "Selecione o produto: ");
-            if (1<=escolhaProduto && escolhaProduto<=3) {
-                execucao = false;
-            } else {
-                System.out.println("Inválido. Escolha um número entre 1 e 3.");
-            }
-        }
-        Produto produtoSelecionado;
-            if (escolhaProduto == 1) { produtoSelecionado = hidratante; }
-            else if (escolhaProduto == 2) { produtoSelecionado = cremedemaos; }
-            else if (escolhaProduto == 3) { produtoSelecionado = esfoliante; }
-            else {
-            System.out.println("Produto inválido.");
-            return;
-            }
-        
-
-        /* informações úteis antes da produção */
-        System.out.println();
-        System.out.println("Informações da produção:");
-        System.out.println("Estoque disponível: " + oleoAmendoas.getQuantidade() + " " + oleoAmendoas.getUnidade());
-        System.out.println("Estoque mínimo: " + oleoAmendoas.getQuantidadeMinima() + " " + oleoAmendoas.getUnidade());
-        System.out.println("Capacidade da esteira: " + esteira.getCapacidadeMaxima() + "" +  oleoAmendoas.getUnidade());
-        System.out.println("Capacidade do " + homogeneizador.getNome() + ": )" + homogeneizador.getCapacidadeMaxima() + " " + oleoAmendoas.getUnidade());
-        System.out.println();
-
-        /* selecionar a demanda de matéria-prima a ser produzida */
-        double demanda = lerDoublePositivo(scanner, "Informe a demanda de matéria-prima (mL): ");
-        produtoSelecionado.definirDemandaMateriaPrima(demanda);
-        demanda = produtoSelecionado.getDemandaMateriaPrima();
-
-        /* verificando se tem estoque antes de começar a produzir */
-        if (!oleoAmendoas.verificarDisponibilidade(demanda)) {
-            System.out.println();
-            System.out.println("[PRODUÇÃO INTERROMPIDA]");
-            System.out.println("Estoque insuficiente de " + oleoAmendoas.getNome());
-            System.out.println();
-            System.out.println("Necessário: " + demanda + " " + oleoAmendoas.getUnidade());
-            System.out.println("Disponível: " + oleoAmendoas.getQuantidade() + " " + oleoAmendoas.getUnidade());
-            return;
-        }
-
-        /* verifica se a produção ultrapassa o estoque mínimo */
-        if (oleoAmendoas.ultrapassaQuantidadeMinima(demanda)) {
-            System.out.println();
-            System.out.println("[PRODUÇÃO INTERROMPIDA]");
-            System.out.println("Prosseguir com a operação comprometerá " + "o estoque mínimo de " + oleoAmendoas.getNome());
-            System.out.println("Necessário: " + demanda + " " + oleoAmendoas.getUnidade());
-            System.out.println("Disponível: " + oleoAmendoas.getQuantidade() + " " + oleoAmendoas.getUnidade());
-            System.out.println("Estoque mínimo: " + oleoAmendoas.getQuantidadeMinima() + " " + oleoAmendoas.getUnidade());
-            return;
-        }
-
-        /* verificando se a esteira suporta a demanda */
-        if (!esteira.verificarCapacidade(demanda)) {
-            System.out.println();
-            System.out.println("[PRODUÇÃO INTERROMPIDA]");
-            System.out.println("A demanda excede a capacidade máxima da esteira.");
-            System.out.println("Demanda: " + demanda + " " + oleoAmendoas.getUnidade());
-            return;
-        }
-
-        /* verificando se a máquina suporta a demanda */
-        if (!homogeneizador.verificarCapacidade(demanda)) {
-            System.out.println();
-            System.out.println("[PRODUÇÃO INTERROMPIDA]");
-            System.out.println("A demanda excede a capacidade máxima do " + homogeneizador.getNome() + ".");
-            System.out.println("Demanda: " + demanda + " " + oleoAmendoas.getUnidade());
-            return;
-        }
-
-        /* esteira carrega um matéria-prima por vez até o Homogeneizador */
-        System.out.println();
-        boolean adicionou =esteira.adicionarItem(oleoAmendoas, demanda);
-
-        if (!adicionou) {
-            System.out.println("[E-01] Não foi possível carregar " + oleoAmendoas.getNome());
-            return;
-        }
-
-        System.out.println("[E-01] " + oleoAmendoas.getNome() + " carregado.");
-
-        esteira.ligar();
-
-        System.out.println("[E-01] Transportando " + oleoAmendoas.getNome() + "...");
-
-        esteira.desligar();
-        esteira.removerItem();
-
-        System.out.println("[E-01] " + oleoAmendoas.getNome() + " entregue ao " + homogeneizador.getNome() + ".");
-        
-        /* inicia o processo de homogeneização */
-        homogeneizador.ligar();
-        System.out.println();
-        System.out.println("[M-01] Homogeneizador iniciado.");
-
-        boolean processado = homogeneizador.processar(oleoAmendoas, produtoSelecionado, demanda);
-
-        homogeneizador.desligar();
-
-        if (!processado) {
-            System.out.println("[M-01] Não foi possível produzir seu produto.");
-            return;
-        }
-        System.out.println("[M-01] " + produtoSelecionado.getNome() + " produzido com sucesso.");
-
-        /* produto volta para esteira e vai até a inspeção */
-        boolean produtoAdicionado = esteira.adicionarItem(produtoSelecionado, demanda);
-        if (!produtoAdicionado) {
-            System.out.println("[E-01] Não foi possível transportar o produto.");
-            return;
-        }
-
-        esteira.ligar();
-        System.out.println("[E-01] Transportando " + produtoSelecionado.getNome() + " para Controle de Qualidade...");
-        esteira.desligar();
-        esteira.removerItem();
-
-        /* inspeção do produto */
-        estacaoInspecao.ativar();
-
-        System.out.println();
-        System.out.println("[CQ-01] Controle de Qualidade ativado.");
-
-        boolean inspecionado = estacaoInspecao.inspecionar(produtoSelecionado);
-        estacaoInspecao.desativar();
-
-        if (!inspecionado) {
-            System.out.println("[CQ-01] Não foi possível realizar a inspeção.");
-            return;
-        }
-        System.out.println("[CQ-01] " + produtoSelecionado.getNome() + " aprovado na inspeção.");
-
-        System.out.println();
-        System.out.println("==============================================");
-        System.out.println("           PRODUÇÃO CONCLUÍDA");
-        System.out.println("==============================================");
-        System.out.println("Produto: " + produtoSelecionado.getId() + " " + produtoSelecionado.getNome());
-        System.out.println("Matéria-prima utilizada: " + oleoAmendoas.getId() + " - "+ oleoAmendoas.getNome());
-        System.out.println("Demanda processada: " + demanda + " " + oleoAmendoas.getUnidade());
-        System.out.println("Estoque restante: " + oleoAmendoas.getQuantidade() + " " + oleoAmendoas.getUnidade());
-        System.out.println("Status: " + produtoSelecionado.getStatus());
-        System.out.println("Controle de Qualidade: APROVADO");
-        System.out.println();
-    }
-
-    /* Métodos de tratamento de leitura do terminal com o scanner */
-    private static int lerInteiro(Scanner scanner, String mensagem) {
+    private static int lerInteiro(Scanner scanner) {
         while (true) {
-            System.out.print(mensagem);
-            if (scanner.hasNextInt()) {
-                return scanner.nextInt();
+            try {
+                return Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.print(
+                        "Valor invalido. Digite um numero inteiro: "
+                );
             }
-            System.out.println("Inválido. Digite apenas números.");
-            scanner.next();
         }
     }
 
-    private static double lerDouble(Scanner scanner, String mensagem) {
+    private static double lerDouble(Scanner scanner) {
         while (true) {
-            System.out.print(mensagem);
-            if (scanner.hasNextDouble()) {
-                return scanner.nextDouble();
-            }
-            System.out.println("Inválido. Digite apenas números.");
-            scanner.next();
-        }
-    }
+            try {
+                double valor = Double.parseDouble(
+                        scanner.nextLine().trim().replace(",", ".")
+                );
 
-    private static double lerDoublePositivo(Scanner scanner, String mensagem) {
-        while (true) {
-            double valor = lerDouble(scanner, mensagem);
-            if (valor > 0) {
-                return valor;
+                if (Double.isFinite(valor)) {
+                    return valor;
+                }
+
+                System.out.print(
+                        "Valor invalido. Digite um numero: "
+                );
+            } catch (NumberFormatException e) {
+                System.out.print(
+                        "Valor invalido. Digite um numero: "
+                );
             }
-            System.out.println("Inválido. O valor deve ser maior que zero.");
         }
     }
 }

@@ -1,51 +1,61 @@
+import java.util.Random;
+
 public abstract class Maquina {
-    //atributos
     private String nome;
     private boolean ligada;
     private double capacidadeMaxima;
     private double probabilidadeFalha;
     private double custoOperacao;
 
-    //constructor
-    public Maquina(String nome, double capacidadeMaxima, double probabilidadeFalha, double custoOperacao) {
+    private Random random = new Random();
+
+    public Maquina(
+            String nome,
+            double capacidadeMaxima,
+            double probabilidadeFalha,
+            double custoOperacao
+    ) {
         this.nome = nome;
+        this.ligada = false;
         this.capacidadeMaxima = capacidadeMaxima;
         this.probabilidadeFalha = probabilidadeFalha;
         this.custoOperacao = custoOperacao;
-        this.ligada = false;
     }
 
-    //métodos concretos
+    public abstract boolean processar(Produto produto);
+
+    public abstract String getTipo();
+
     public void ligar() {
         ligada = true;
     }
+
     public void desligar() {
         ligada = false;
     }
-    public String getNome() {
-        return nome;
-    }
+
     public boolean estaLigada() {
         return ligada;
     }
-    public boolean verificarCapacidade(double demanda) {
-        return (demanda <= capacidadeMaxima);
+
+    public String getNome() {
+        return nome;
     }
+
     public double getCapacidadeMaxima() {
         return capacidadeMaxima;
     }
+
     public double getCustoOperacao() {
         return custoOperacao;
     }
-    public double verificarFalha() {
-        if (Math.random() < this.probabilidadeFalha)
-            return this.probabilidadeFalha;
-        else
-            return 0;   
+
+    protected double getProbabilidadeFalha() {
+        return probabilidadeFalha;
     }
 
-    //métodos abstratos
-    public abstract boolean processar(Produto produto, double demanda);
-    public abstract String getTipo();
-
+    // Verifica se a falha acontece de acordo com a probabilidade da maquina
+    protected boolean verificarFalha() {
+        return random.nextDouble() < probabilidadeFalha;
+    }
 }
