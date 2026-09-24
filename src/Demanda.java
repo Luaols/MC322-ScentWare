@@ -1,7 +1,7 @@
 public class Demanda {
     private String tipoProduto;
     private int quantidadeProdutos;
-    private boolean atendida;
+    private StatusDemanda status;
 
     public Demanda(
             String tipoProduto,
@@ -23,10 +23,7 @@ public class Demanda {
         return quantidadeProdutos * produto.getQuantidadeMateriaPrimaPorUnidade();
     }
 
-    public void atender() {
-        atendida = true;
-    }
-
+    
     public String getTipoProduto() {
         return tipoProduto;
     }
@@ -34,8 +31,14 @@ public class Demanda {
     public int getQuantidadeProdutos() {
         return quantidadeProdutos;
     }
-
-    public boolean isAtendida() {
-        return atendida;
+    public StatusDemanda getStatus(){
+        return status ;
     }
+
+    public void atender(Demanda demanda) {
+        if (demanda.getStatus() == StatusDemanda.CANCELADA){
+        atendida = true;
+        }
+    }
+
 }

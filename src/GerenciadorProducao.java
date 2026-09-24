@@ -1,11 +1,12 @@
 import java.util.ArrayList;
 
-public class GerenciadorProducao {
+public class GerenciadorProducao implements EstrategiaProducao{
     private ArrayList<Demanda> demandas;
     private ArrayList<Produto> produtosFabricados;
     private ArrayList<Maquina> maquinas;
     private MateriaPrima materiaPrima;
     private double budget;
+    private EstrategiaProducao estrategiaAtual;
 
     public GerenciadorProducao(
             MateriaPrima materiaPrima,
@@ -16,6 +17,20 @@ public class GerenciadorProducao {
         this.demandas = new ArrayList<>();
         this.produtosFabricados = new ArrayList<>();
         this.maquinas = new ArrayList<>();
+    }
+
+    @Override 
+    public String getNomeEstrategia(){
+        return estrategiaAtual.getNomeEstrategia();
+    }
+    public void setEstrategia(EstrategiaProducao novaEstrategia){
+        estrategiaAtual = novaEstrategia;
+    }
+    public void executarProximaProducao(){
+        Demanda proximaProducao = estrategiaAtual.selecionarDemanda(demandas, budget);
+        if (proximaProducao != null){
+            fabricarDemanda(proximaProducao.getTipoProduto(), )
+        }
     }
 
     public void registrarDemanda(Demanda demanda) {

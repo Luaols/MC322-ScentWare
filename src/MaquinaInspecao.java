@@ -7,9 +7,10 @@ public class MaquinaInspecao extends Maquina {
             String nome,
             double capacidadeMaxima,
             double probabilidadeFalha,
-            double custoOperacao
+            double custoOperacao,
+            double health
     ) {
-        super(nome, capacidadeMaxima, probabilidadeFalha, custoOperacao);
+        super(nome, capacidadeMaxima, probabilidadeFalha, custoOperacao, health);
     }
 
     @Override

@@ -4,6 +4,7 @@ public class Main {
     public static void main(String[] args) {
         exibirIntroducao();
         Scanner scanner = new Scanner(System.in);
+        int cenario = lerInteiro(scanner);
 
         // Materia-prima principal da fabrica
         MateriaPrima oleoAmendoas = new MateriaPrima(
@@ -50,7 +51,8 @@ public class Main {
                         "Homogeneizador",
                         1000.0,
                         0.10,
-                        20.0
+                        20.0,
+                        100.0
                 )
         );
 
@@ -59,7 +61,8 @@ public class Main {
                         "Empacotadora",
                         1000.0,
                         0.05,
-                        10.0
+                        10.0,
+                        100.0
                 )
         );
 
@@ -68,7 +71,8 @@ public class Main {
                         "Inspecao",
                         1000.0,
                         0.10,
-                        15.0
+                        15.0,
+                        100.0
                 )
         );
 
@@ -162,6 +166,9 @@ public class Main {
         System.out.println();
         System.out.println("Desenvolvido por: Luana Oliveira e Roberta Santos");
         System.out.println("===============================================================");
+        System.out.println("Escolha com qual cenário de operação deseja executar:");
+        System.out.println("[01] Ideal");
+        System.out.println("[02] Apocalíptico");
         System.out.println();
     }
 
