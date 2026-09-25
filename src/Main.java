@@ -227,52 +227,7 @@ public class Main {
                     System.out.println("\nEncerrando a ScentWare...");
                     System.out.println("Ate a proxima! :)");
                     break;
-            }
-                
-/* 
-            switch (opcao) {
-                case 1:
-                    atualizarDemanda(
-                            scanner,
-                            gerenciador,
-                            hidratante.getTipo()
-                    );
-                    break;
-                case 2:
-                    atualizarDemanda(
-                            scanner,
-                            gerenciador,
-                            cremeDeMaos.getTipo()
-                    );
-                    break;
-                case 3:
-                    atualizarDemanda(
-                            scanner,
-                            gerenciador,
-                            esfoliante.getTipo()
-                    );
-                    break;
-                case 4:
-                    fabricarProduto(
-                            gerenciador,
-                            hidratante
-                    );
-                    break;
-                case 5:
-                    fabricarProduto(
-                            gerenciador,
-                            cremeDeMaos
-                    );
-                    break;
-                case 6:
-                    fabricarProduto(
-                            gerenciador,
-                            esfoliante
-                    );
-                    break;
-
-            } */
-
+            }            
         } while (opcao != 0);
         scanner.close();
     }
