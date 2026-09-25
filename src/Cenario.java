@@ -34,5 +34,8 @@ public enum Cenario {
     public double getProbabilidadeFalhaInspecao(){
         return probabilidadeFalhaInspecao;
     }
+    public void exibirCenarioAtual(){
+        System.out.println("Cenario atual : " + this.name());
+    }
     
 }

@@ -37,6 +37,23 @@ public class GerenciadorProducao implements EstrategiaProducao{
             fabricarDemanda(proximaProducao.getTipoProduto(), )
         }
     }
+    public void gerarAuditoriaGeral(){
+        System.out.println("AUDITÓRIA GERAL");
+        System.out.println();
+        if (!maquinas.isEmpty()){
+            for (Maquina maquina : maquinas){
+                System.out.print("Nome do equipamento : " + maquina.getNome() + " Saúde : " + maquina.getHealth());
+                System.out.print(" Precisa de manutenção : ");
+                if (maquina.precisaManutencao()){
+                    System.out.println("Sim");
+                }
+                else {
+                    System.out.println("Não"); 
+                }
+            }
+            
+        }
+    }
 
     public void registrarDemanda(Demanda demanda) {
         demandas.add(demanda);
@@ -209,6 +226,10 @@ public class GerenciadorProducao implements EstrategiaProducao{
     public void exibirBudget() {
         System.out.printf("Budget atual: R$ %.2f%n", budget);
     }
+    public void exibirEstrategiaAtual(){
+        System.out.printf("Estratégia atual : " + estrategiaAtual.getNomeEstrategia());
+    }
+    
 
     public void exibirArmazem() {
         if (produtosFabricados.isEmpty()) {
@@ -245,4 +266,17 @@ public class GerenciadorProducao implements EstrategiaProducao{
     public ArrayList<Demanda> getDemandas() {
         return demandas;
     }
+    public void exibirDemandas(){
+        if (!demandas.isEmpty()){
+            for (Demanda demanda : demandas){
+                System.out.println(" Tipo : " + demanda.getTipoProduto() + " Quantidade : " 
+                + demanda.getQuantidadeProdutos() + " Status : " + demanda.getStatus());
+            }
+        }
+        else{
+            System.out.println("Não existem demandas");
+        }
+        System.out.println();
+    }
+    
 }

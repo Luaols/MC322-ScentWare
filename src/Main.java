@@ -10,8 +10,8 @@ public class Main {
         while(cenario < 1 && cenario > 2) {
 
             System.out.println("Escolha com qual cenário de operação deseja executar:");
-            System.out.println("[1] Ideal");
-            System.out.println("[2] Apocalíptico");
+            System.out.println("1 - Ideal");
+            System.out.println("2 - Apocalíptico");
             System.out.println();
 
             cenario = lerInteiro(scanner);
@@ -101,13 +101,116 @@ public class Main {
         );
 
         int opcao;
+        int opcaoSecundaria;
 
         do {
-            exibirMenu(gerenciador);
+            exibirMenuPrincipal(gerenciador, cenarioAtual);
 
             System.out.print("Escolha uma opcao: ");
             opcao = lerInteiro(scanner);
 
+            switch (opcao){
+                case 1:  
+                    do{
+                        subMenuDemandas();
+                        System.out.print("Escolha uma opcao: ");
+                        opcaoSecundaria = lerInteiro(scanner);
+                        switch(opcaoSecundaria){
+                            case 1:
+                            case 2:
+                                gerenciador.exibirDemandas();
+                                break;
+                            case 0:
+                            default:
+                                System.out.println("\nOpcao invalida.");
+                        }
+                    }while(true);
+                case 2:
+                    do{
+                        subMenuFabricar();
+                        System.out.print("Escolha uma opcao: ");
+                        opcaoSecundaria = lerInteiro(scanner);
+                        switch(opcaoSecundaria){
+                            case 1:
+                                gerenciador.executarProximaProducao();
+                                break;
+                            case 2:
+                              
+                            case 0:
+                            default:
+                                System.out.println("\nOpcao invalida.");
+                        }
+                    }while(true);
+                case 3:
+                    do{
+                        subMenuConsultar();
+                        System.out.print("Escolha uma opcao: ");
+                        opcaoSecundaria = lerInteiro(scanner);
+                        switch(opcaoSecundaria){
+                            case 1:
+                                System.out.println("\n=== ARMAZEM ===");
+                                gerenciador.exibirArmazem();
+                                break;
+                            case 2:
+                                exibirEstoque(gerenciador);
+                                break;
+                            case 0:
+                            default:
+                                System.out.println("\nOpcao invalida.");
+                        }
+                    }while(true);
+                case 4:
+                    comprarMateriaPrima(
+                            scanner,
+                            gerenciador
+                    );
+                    break;
+                case 5:
+                    do{
+                        subMenugerenciarEstrategia();
+                        System.out.print("Escolha uma opcao: ");
+                        opcaoSecundaria = lerInteiro(scanner);
+                        switch(opcaoSecundaria){
+                            case 1:
+                                gerenciador.setEstrategia();
+                                break;
+                            case 2:
+                                gerenciador.setEstrategia();
+                                break;
+                            case 3:
+                                gerenciador.setEstrategia();
+                                break;
+                            case 0:
+                            default:
+                                System.out.println("\nOpcao invalida.");
+                        }
+                    }while(true);
+                case 6:
+                    do{
+                        subMenuAuditoria();
+                        System.out.print("Escolha uma opcao: ");
+                        opcaoSecundaria = lerInteiro(scanner);
+                        switch(opcaoSecundaria){
+                            case 1:
+                                gerenciador.gerarAuditoriaGeral();                            
+                                break;
+                            case 2:
+                              
+                            case 3:
+                             
+                            case 0:
+                            default:
+                                System.out.println("\nOpcao invalida.");
+                        }while(true);
+                case 0:
+                    System.out.println("\nEncerrando a ScentWare...");
+                    System.out.println("Ate a proxima! :)");
+                    break;
+                default:
+                    System.out.println("\nOpcao invalida.");
+            }
+                
+/* 
             switch (opcao) {
                 case 1:
                     atualizarDemanda(
@@ -148,26 +251,8 @@ public class Main {
                             esfoliante
                     );
                     break;
-                case 7:
-                    System.out.println("\n=== ARMAZEM ===");
-                    gerenciador.exibirArmazem();
-                    break;
-                case 8:
-                    exibirEstoque(gerenciador);
-                    break;
-                case 9:
-                    comprarMateriaPrima(
-                            scanner,
-                            gerenciador
-                    );
-                    break;
-                case 0:
-                    System.out.println("\nEncerrando a ScentWare...");
-                    System.out.println("Ate a proxima! :)");
-                    break;
-                default:
-                    System.out.println("\nOpcao invalida.");
-            }
+
+            } */
 
         } while (opcao != 0);
         scanner.close();
@@ -193,28 +278,61 @@ public class Main {
         System.out.println();
     }
 
-    private static void exibirMenu(GerenciadorProducao gerenciador) {
+    private static void exibirMenuPrincipal(GerenciadorProducao gerenciador, Cenario cenarioAtual) {
         System.out.println("\n================================");
         System.out.println("            SCENTWARE");
         System.out.println("================================");
+        cenarioAtual.exibirCenarioAtual();
+        gerenciador.exibirEstrategiaAtual();
         gerenciador.exibirBudget();
-        System.out.println("\nATUALIZAR DEMANDAS");
-        System.out.println("1 - Atualizar demanda de Hidratante");
-        System.out.println("2 - Atualizar demanda de Creme de Maos");
-        System.out.println("3 - Atualizar demanda de Esfoliante");
-        System.out.println("\nFABRICAR");
-        System.out.println("4 - Fabricar Hidratante");
-        System.out.println("5 - Fabricar Creme de Maos");
-        System.out.println("6 - Fabricar Esfoliante");
-        System.out.println("\nCONSULTAR");
-        System.out.println("7 - Ver armazem");
-        System.out.println("8 - Ver estoque de materia-prima");
-        System.out.println("\nCOMPRAR MATERIA-PRIMA");
-        System.out.println("9 - Comprar materia-prima");
-        System.out.println("\n0 - Sair");
+        System.out.println("[ 1 ] - DEMANDAS");
+        System.out.println("[ 2 ] - FABRICAR");
+        System.out.println("[ 3 ] - CONSULTAR");
+        System.out.println("[ 4 ] - COMPRAR MATERIA-PRIMA");
+        System.out.println("[ 5 ] - GERENCIAR ESTRATÉGIA");
+        System.out.println("[ 6 ] - AUDITORIA");
+        System.out.println("[ 0 ] - Sair");
         System.out.println("================================");
     }
-
+    private static void subMenuDemandas(){
+        System.out.println("[ x ] DEMANDAS");
+        System.out.println("     [ 1 ] - Atualizar demanda");
+        System.out.println("     [ 2 ] - Listar demandas");
+        System.out.println("     [ 0 ] - Voltar");
+    }
+    private static void subMenuFabricar(){
+        System.out.println("[ x ] FABRICAR");
+        System.out.println("     [ 1 ] - Processar próxima demanda");
+        System.out.println("     [ 2 ] - Fabricar item específico");
+        System.out.println("     [ 0 ] - Voltar");
+    }
+    private static void subMenuFabricarItemEspecifico(){
+        System.out.println("[ x ] FABRICAR ITEM ESPECÍFICO");
+        System.out.println("     [ 1 ] - Fabricar creme de mãos");
+        System.out.println("     [ 2 ] - Fabricar esfoliante");
+        System.out.println("     [ 3 ] - Fabricar hidratante");
+        System.out.println("     [ 0 ] - Voltar");
+    }
+    private static void subMenuConsultar(){
+        System.out.println("[ x ] CONSULTAR");
+        System.out.println("     [ 1 ] - Ver armazém");
+        System.out.println("     [ 2 ] - Ver estoque de matéria-prima");
+        System.out.println("     [ 0 ] - Voltar");
+    }
+    private static void subMenugerenciarEstrategia(){
+        System.out.println("[ x ] GERENCIAR ESTRATÉGIA");
+        System.out.println("     [ 1 ] - Ordem de chegada");
+        System.out.println("     [ 2 ] - Maior demanda");
+        System.out.println("     [ 3 ] - Maximizar produção");
+        System.out.println("     [ 0 ] - Voltar");
+    }
+    private static void subMenuAuditoria(){
+        System.out.println("[ x ] AUDITORIA");
+        System.out.println("     [ 1 ] - Relatório geral");
+        System.out.println("     [ 2 ] - Detalhar máquinas");
+        System.out.println("     [ 3 ] - Detalhar produtos");
+        System.out.println("     [ 0 ] - Voltar");
+    }
     private static void atualizarDemanda(
             Scanner scanner,
             GerenciadorProducao gerenciador,
