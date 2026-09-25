@@ -122,6 +122,7 @@ public class Main {
                                 gerenciador.exibirDemandas();
                                 break;
                             case 0:
+                                break;
                             default:
                                 System.out.println("\nOpcao invalida.");
                         }
@@ -139,6 +140,7 @@ public class Main {
                             case 2:
                               
                             case 0:
+                                break;
                             default:
                                 System.out.println("\nOpcao invalida.");
                         }
@@ -158,6 +160,7 @@ public class Main {
                                 exibirEstoque(gerenciador);
                                 break;
                             case 0:
+                                break;
                             default:
                                 System.out.println("\nOpcao invalida.");
                         }
@@ -186,6 +189,7 @@ public class Main {
                                 gerenciador.setEstrategia();
                                 break;
                             case 0:
+                                break;
                             default:
                                 System.out.println("\nOpcao invalida.");
                         }
@@ -205,6 +209,7 @@ public class Main {
                             case 3:
                              
                             case 0:
+                                break;
                             default:
                                 System.out.println("\nOpcao invalida.");
                         }
@@ -214,7 +219,7 @@ public class Main {
                     System.out.println("\nEncerrando a ScentWare...");
                     System.out.println("Ate a proxima! :)");
                     break;
-                    
+
                 default:
                     System.out.println("\nOpcao invalida.");
             }
