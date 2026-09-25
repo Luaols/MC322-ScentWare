@@ -102,55 +102,77 @@ public class Main {
 
         int opcao;
         int opcaoSecundaria;
+        int opcao3;
 
         do {
             exibirMenuPrincipal(gerenciador, cenarioAtual);
 
             System.out.print("Escolha uma opcao: ");
-            opcao = lerInteiro(scanner);
+            opcao = lerInteiroEntre(scanner, 0, 6);
 
             switch (opcao){
 
-                case 1:  
-                    do{
+                case 1: 
                         subMenuDemandas();
                         System.out.print("Escolha uma opcao: ");
-                        opcaoSecundaria = lerInteiro(scanner);
+                        opcaoSecundaria = lerInteiroEntre(scanner, 0 ,2);
                         switch(opcaoSecundaria){
                             case 1:
+                                subMenuAtualizarDemanda();
+                                System.out.print("Escolha uma opcao: ");
+                                opcao3 = lerInteiroEntre(scanner, 0 ,3);
+                                switch(opcao3){
+                                    case 1:
+                                        atualizarDemanda(scanner,gerenciador,cremeDeMaos.getTipo());
+                                        break;
+                                    case 2:
+                                        atualizarDemanda(scanner,gerenciador,esfoliante.getTipo());
+                                        break;
+                                    case 3:
+                                        atualizarDemanda(scanner,gerenciador,hidratante.getTipo());
+                                        break;
+                                    case 0:
+                                        break;
+                                }
                             case 2:
+                                System.out.println("\n=== DEMANDAS ===");
                                 gerenciador.exibirDemandas();
                                 break;
                             case 0:
                                 break;
-                            default:
-                                System.out.println("\nOpcao invalida.");
                         }
-                    }while(true);
 
                 case 2:
-                    do{
                         subMenuFabricar();
                         System.out.print("Escolha uma opcao: ");
-                        opcaoSecundaria = lerInteiro(scanner);
+                        opcaoSecundaria = lerInteiroEntre(scanner, 0 , 2);
                         switch(opcaoSecundaria){
                             case 1:
                                 gerenciador.executarProximaProducao();
                                 break;
                             case 2:
-                              
+                                subMenuFabricarItemEspecifico();
+                                System.out.print("Escolha uma opcao: ");
+                                opcao3 = lerInteiroEntre(scanner, 0 , 3);
+                                switch(opcao3){
+                                    case 1:
+                                        fabricarProduto(gerenciador, cremeDeMaos);
+                                    break;
+                                    case 2:
+                                        fabricarProduto(gerenciador, esfoliante);
+                                    break;
+                                    case 3:
+                                        fabricarProduto(gerenciador, hidratante);
+                                    break;
+                                }
                             case 0:
                                 break;
-                            default:
-                                System.out.println("\nOpcao invalida.");
                         }
-                    }while(true);
 
                 case 3:
-                    do{
                         subMenuConsultar();
                         System.out.print("Escolha uma opcao: ");
-                        opcaoSecundaria = lerInteiro(scanner);
+                        opcaoSecundaria = lerInteiroEntre(scanner, 0, 2);
                         switch(opcaoSecundaria){
                             case 1:
                                 System.out.println("\n=== ARMAZEM ===");
@@ -161,11 +183,7 @@ public class Main {
                                 break;
                             case 0:
                                 break;
-                            default:
-                                System.out.println("\nOpcao invalida.");
                         }
-                    }while(true);
-
                 case 4:
                     comprarMateriaPrima(
                             scanner,
@@ -174,10 +192,9 @@ public class Main {
                     break;
 
                 case 5:
-                    do{
                         subMenugerenciarEstrategia();
                         System.out.print("Escolha uma opcao: ");
-                        opcaoSecundaria = lerInteiro(scanner);
+                        opcaoSecundaria = lerInteiroEntre(scanner, 0, 3);
                         switch(opcaoSecundaria){
                             case 1:
                                 gerenciador.setEstrategia();
@@ -190,16 +207,11 @@ public class Main {
                                 break;
                             case 0:
                                 break;
-                            default:
-                                System.out.println("\nOpcao invalida.");
                         }
-                    }while(true);
-
                 case 6:
-                    do{
                         subMenuAuditoria();
                         System.out.print("Escolha uma opcao: ");
-                        opcaoSecundaria = lerInteiro(scanner);
+                        opcaoSecundaria = lerInteiroEntre(scanner, 0, 3);
                         switch(opcaoSecundaria){
                             case 1:
                                 gerenciador.gerarAuditoriaGeral();                            
@@ -210,18 +222,11 @@ public class Main {
                              
                             case 0:
                                 break;
-                            default:
-                                System.out.println("\nOpcao invalida.");
                         }
-                    }while(true);
-
                 case 0:
                     System.out.println("\nEncerrando a ScentWare...");
                     System.out.println("Ate a proxima! :)");
                     break;
-
-                default:
-                    System.out.println("\nOpcao invalida.");
             }
                 
 /* 
@@ -312,6 +317,13 @@ public class Main {
         System.out.println("[ x ] DEMANDAS");
         System.out.println("     [ 1 ] - Atualizar demanda");
         System.out.println("     [ 2 ] - Listar demandas");
+        System.out.println("     [ 0 ] - Voltar");
+    }
+    private static void subMenuAtualizarDemanda(){
+        System.out.println("[ x ] ATUALIZAR DEMANDAS");
+        System.out.println("     [ 1 ] - Atualizar demanda de creme de mãos");
+        System.out.println("     [ 2 ] - Atualizar demanda de esfoliante");
+        System.out.println("     [ 3 ] - Atualizar demanda de hidratante");
         System.out.println("     [ 0 ] - Voltar");
     }
     private static void subMenuFabricar(){
@@ -428,6 +440,18 @@ public class Main {
                 System.out.print(
                         "Valor invalido. Digite um numero inteiro: "
                 );
+            }
+        }
+    }
+    private static int lerInteiroEntre(Scanner scanner, int a, int b){
+        int valorInteiro; 
+        while(true){
+            valorInteiro= lerInteiro(scanner);
+            if (valorInteiro >= a && valorInteiro <= b){
+                return valorInteiro;
+            }
+            else{
+                System.out.println("\nOpcao invalida.");
             }
         }
     }
