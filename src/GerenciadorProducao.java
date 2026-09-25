@@ -42,8 +42,7 @@ public class GerenciadorProducao implements EstrategiaProducao{
         System.out.println();
         if (!maquinas.isEmpty()){
             for (Maquina maquina : maquinas){
-                System.out.print("Nome do equipamento : " + maquina.getNome() + " Saúde : " + maquina.getHealth());
-                System.out.print(" Precisa de manutenção : ");
+                System.out.print("Nome do equipamento : " + maquina.getNome() + " Saúde : " + maquina.getHealth() + " Precisa de manutenção : ");
                 if (maquina.precisaManutencao()){
                     System.out.println("Sim");
                 }
@@ -227,7 +226,7 @@ public class GerenciadorProducao implements EstrategiaProducao{
         System.out.printf("Budget atual: R$ %.2f%n", budget);
     }
     public void exibirEstrategiaAtual(){
-        System.out.printf("Estratégia atual : " + estrategiaAtual.getNomeEstrategia());
+        System.out.println("Estratégia atual : " + estrategiaAtual.getNomeEstrategia());
     }
     
 
@@ -246,7 +245,8 @@ public class GerenciadorProducao implements EstrategiaProducao{
             System.out.println(
                     produto.getId() + " - "
                     + produto.getNome() + " - "
-                    + produto.getStatus()
+                    + produto.getStatus() + " - Qualidade : "
+                    + produto.getQualidade()
             );
         }
     }
