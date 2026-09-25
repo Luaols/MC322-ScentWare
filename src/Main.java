@@ -110,6 +110,7 @@ public class Main {
             opcao = lerInteiro(scanner);
 
             switch (opcao){
+
                 case 1:  
                     do{
                         subMenuDemandas();
@@ -125,6 +126,7 @@ public class Main {
                                 System.out.println("\nOpcao invalida.");
                         }
                     }while(true);
+
                 case 2:
                     do{
                         subMenuFabricar();
@@ -141,6 +143,7 @@ public class Main {
                                 System.out.println("\nOpcao invalida.");
                         }
                     }while(true);
+
                 case 3:
                     do{
                         subMenuConsultar();
@@ -159,12 +162,14 @@ public class Main {
                                 System.out.println("\nOpcao invalida.");
                         }
                     }while(true);
+
                 case 4:
                     comprarMateriaPrima(
                             scanner,
                             gerenciador
                     );
                     break;
+
                 case 5:
                     do{
                         subMenugerenciarEstrategia();
@@ -185,6 +190,7 @@ public class Main {
                                 System.out.println("\nOpcao invalida.");
                         }
                     }while(true);
+
                 case 6:
                     do{
                         subMenuAuditoria();
@@ -201,11 +207,14 @@ public class Main {
                             case 0:
                             default:
                                 System.out.println("\nOpcao invalida.");
-                        }while(true);
+                        }
+                    }while(true);
+
                 case 0:
                     System.out.println("\nEncerrando a ScentWare...");
                     System.out.println("Ate a proxima! :)");
                     break;
+                    
                 default:
                     System.out.println("\nOpcao invalida.");
             }
