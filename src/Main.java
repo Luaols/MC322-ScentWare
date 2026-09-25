@@ -4,7 +4,31 @@ public class Main {
     public static void main(String[] args) {
         exibirIntroducao();
         Scanner scanner = new Scanner(System.in);
-        int cenario = lerInteiro(scanner);
+
+        int cenario = 0; 
+        Cenario cenarioAtual = null;
+        while(cenario < 1 && cenario > 2) {
+
+            System.out.println("Escolha com qual cenário de operação deseja executar:");
+            System.out.println("[1] Ideal");
+            System.out.println("[2] Apocalíptico");
+            System.out.println();
+
+            cenario = lerInteiro(scanner);
+        
+            switch(cenario){
+                case 1 :
+                    cenarioAtual = Cenario.IDEAL;
+                    break;
+                case 2 :
+                    cenarioAtual = Cenario.APOCALIPTICO;
+                    break;
+                default :
+                    System.out.println("Opção inválida");
+            }
+        } 
+        
+
 
         // Materia-prima principal da fabrica
         MateriaPrima oleoAmendoas = new MateriaPrima(
@@ -37,7 +61,7 @@ public class Main {
         // Gerenciador da fabrica
         GerenciadorProducao gerenciador = new GerenciadorProducao(
                 oleoAmendoas,
-                1000.0
+                cenarioAtual.getBudget()
         );
 
         // Demandas iniciais
@@ -50,7 +74,7 @@ public class Main {
                 new MaquinaHomogeneizador(
                         "Homogeneizador",
                         1000.0,
-                        0.10,
+                        cenarioAtual.getProbabilidadeFalhaHomogeneizador(),
                         20.0,
                         100.0
                 )
@@ -60,7 +84,7 @@ public class Main {
                 new MaquinaEmpacotadora(
                         "Empacotadora",
                         1000.0,
-                        0.05,
+                        cenarioAtual.getProbabilidadeFalhaEmpacotador(),
                         10.0,
                         100.0
                 )
@@ -70,7 +94,7 @@ public class Main {
                 new MaquinaInspecao(
                         "Inspecao",
                         1000.0,
-                        0.10,
+                        cenarioAtual.getProbabilidadeFalhaInspecao(),
                         15.0,
                         100.0
                 )
@@ -166,9 +190,6 @@ public class Main {
         System.out.println();
         System.out.println("Desenvolvido por: Luana Oliveira e Roberta Santos");
         System.out.println("===============================================================");
-        System.out.println("Escolha com qual cenário de operação deseja executar:");
-        System.out.println("[01] Ideal");
-        System.out.println("[02] Apocalíptico");
         System.out.println();
     }
 
