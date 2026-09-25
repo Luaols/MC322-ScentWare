@@ -9,6 +9,11 @@ public class MaquinaHomogeneizador extends Maquina {
         super(nome, capacidadeMaxima, probabilidadeFalha, custoOperacao, health);
     }
 
+    @Override 
+    public String gerarRelatorioDiagnostico(){
+        return("" + getHealth());
+    }
+
     @Override
     public boolean processar(Produto produto) {
         ligar();

@@ -41,6 +41,9 @@ public abstract class Maquina implements Auditavel {
     public void reparar(){
         health = 100;
     }
+    public double getHealth(){
+        return health;
+    }
 
     public void ligar() {
         ligada = true;

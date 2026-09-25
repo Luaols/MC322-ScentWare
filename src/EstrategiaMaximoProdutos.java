@@ -1,7 +1,9 @@
+import java.util.List;
+
 public interface EstrategiaMaximoProdutos extends EstrategiaProducao{
     @Override 
     default Demanda selecionarDemanda(List<Demanda> demandas, double orcamentoDisponivel){
-        if (lista.isEmpty()){
+        if (demandas.isEmpty()){
             return null;
         }
         double orcamento = 0;

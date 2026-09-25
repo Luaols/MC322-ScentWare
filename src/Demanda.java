@@ -9,13 +9,13 @@ public class Demanda {
     ) {
         this.tipoProduto = tipoProduto;
         this.quantidadeProdutos = quantidadeProdutos;
-        this.atendida = false;
+        status = StatusDemanda.PENDENTE;
     }
 
     public void atualizarQuantidade(int novaQuantidade) {
         if (novaQuantidade >= 0) {
             this.quantidadeProdutos = novaQuantidade;
-            this.atendida = false;
+            status = StatusDemanda.PENDENTE;
         }
     }
 
@@ -34,10 +34,13 @@ public class Demanda {
     public StatusDemanda getStatus(){
         return status ;
     }
+    public void setStatus(StatusDemanda statusDemanda){
+        status = statusDemanda;
+    }
 
     public void atender(Demanda demanda) {
-        if (demanda.getStatus() == StatusDemanda.CANCELADA){
-        atendida = true;
+        if (demanda.getStatus() != StatusDemanda.CANCELADA){
+            demanda.setStatus(StatusDemanda.CONCLUIDA);
         }
     }
 

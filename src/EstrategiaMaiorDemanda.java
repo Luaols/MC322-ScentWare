@@ -1,10 +1,11 @@
+import java.util.List;
 public interface EstrategiaMaiorDemanda extends EstrategiaProducao{
     @Override 
     default Demanda selecionarDemanda(List<Demanda> demandas, double orcamentoDisponivel){
-        if (lista.isEmpty()){
+        if (demandas.isEmpty()){
             return null;
         }
-        Demanda maiorDemanda ;
+        Demanda maiorDemanda = null;
         int quantidadeProdutos = 0;
         for ( Demanda demanda : demandas ){
             if (demanda.getStatus() == StatusDemanda.PENDENTE && demanda.getQuantidadeProdutos() > quantidadeProdutos){

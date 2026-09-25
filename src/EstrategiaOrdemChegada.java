@@ -1,7 +1,9 @@
+import java.util.List;
+
 public interface EstrategiaOrdemChegada extends EstrategiaProducao{
     @Override 
     default Demanda selecionarDemanda(List<Demanda> demandas, double orcamentoDisponivel){
-        if (lista.isEmpty()){
+        if (demandas.isEmpty()){
             return null;
         }
         for ( Demanda demanda : demandas ){
@@ -9,6 +11,7 @@ public interface EstrategiaOrdemChegada extends EstrategiaProducao{
                 return demanda;
             }
         }
+        return null;
     }
     @Override 
     default String getNomeEstrategia(){

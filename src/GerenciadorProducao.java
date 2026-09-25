@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class GerenciadorProducao implements EstrategiaProducao{
     private ArrayList<Demanda> demandas;
@@ -17,6 +18,10 @@ public class GerenciadorProducao implements EstrategiaProducao{
         this.demandas = new ArrayList<>();
         this.produtosFabricados = new ArrayList<>();
         this.maquinas = new ArrayList<>();
+    }
+    @Override
+    public Demanda selecionarDemanda(List<Demanda> demandas, double orcamentoDisponivel){
+        return estrategiaAtual.selecionarDemanda(demandas, orcamentoDisponivel);
     }
 
     @Override 
@@ -82,7 +87,7 @@ public class GerenciadorProducao implements EstrategiaProducao{
             System.out.println("Demanda nao encontrada.");
             return false;
         }
-        if (demanda.isAtendida()) {
+        if (demanda.getStatus() == StatusDemanda.CONCLUIDA) {
             System.out.println("Essa demanda ja foi atendida.");
             return false;
         }
@@ -150,7 +155,7 @@ public class GerenciadorProducao implements EstrategiaProducao{
         System.out.println("Produtos rejeitados: " + produtosRejeitados);
 
         if (produtosRejeitados == 0) {
-            demanda.atender();
+            demanda.atender(demanda);;
             System.out.println("Demanda atendida completamente.");
             return true;
         }
