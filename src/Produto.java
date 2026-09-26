@@ -7,6 +7,7 @@ public abstract class Produto implements Auditavel {
     private double probabilidadeFalhaAcumulada;
     private static int totalProdutosFabricados = 0;
 
+
     public Produto(
             String id,
             String nome,
@@ -25,8 +26,21 @@ public abstract class Produto implements Auditavel {
 
     public abstract double calcularTempoProducao();
 
-    public abstract String getTipo();
+    public abstract TipoProduto getTipo();
 
+    @Override 
+    public String gerarRelatorioDiagnostico(){
+        return(nome + "| Qualidade: " + qualidade + "% | Probabilidade de falha acumulada : " + probabilidadeFalhaAcumulada);
+    }
+    @Override
+    public boolean precisaManutencao(){
+        if (probabilidadeFalhaAcumulada >= 1){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     public String getId() {
         return id;
     }
@@ -69,4 +83,5 @@ public abstract class Produto implements Auditavel {
     public static int getTotalProdutosFabricados() {
         return totalProdutosFabricados;
     }
+
 }

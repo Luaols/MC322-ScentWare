@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -61,13 +63,14 @@ public class Main {
         // Gerenciador da fabrica
         GerenciadorProducao gerenciador = new GerenciadorProducao(
                 oleoAmendoas,
-                cenarioAtual.getBudget()
+                cenarioAtual.getBudget(),
+                new ArrayList<>(List.of(cremeDeMaos, hidratante, esfoliante))
         );
 
         // Demandas iniciais
-        gerenciador.registrarDemanda(new Demanda(hidratante.getTipo(), 0));
-        gerenciador.registrarDemanda(new Demanda(cremeDeMaos.getTipo(), 0));
-        gerenciador.registrarDemanda(new Demanda(esfoliante.getTipo(), 0));
+        gerenciador.registrarDemanda(new Demanda(hidratante.getTipo(), 0, 0));
+        gerenciador.registrarDemanda(new Demanda(cremeDeMaos.getTipo(), 0, 0));
+        gerenciador.registrarDemanda(new Demanda(esfoliante.getTipo(), 0, 0));
 
         // Maquinas da linha de producao
         gerenciador.adicionarMaquina(
@@ -76,7 +79,8 @@ public class Main {
                         1000.0,
                         cenarioAtual.getProbabilidadeFalhaHomogeneizador(),
                         20.0,
-                        100.0
+                        100.0,
+                        cenarioAtual.getMaximoDesgasteHomogeneizador()
                 )
         );
 
@@ -86,7 +90,8 @@ public class Main {
                         1000.0,
                         cenarioAtual.getProbabilidadeFalhaEmpacotador(),
                         10.0,
-                        100.0
+                        100.0,
+                        cenarioAtual.getMaximoDesgasteEmpacotador()
                 )
         );
 
@@ -96,9 +101,14 @@ public class Main {
                         1000.0,
                         cenarioAtual.getProbabilidadeFalhaInspecao(),
                         15.0,
-                        100.0
+                        100.0,
+                        cenarioAtual.getMaximoDesgasteInspecao()
                 )
         );
+        //Estratégias de produção
+        EstrategiaProducao estrategiaOrdemChegada = new EstrategiaOrdemChegada();
+        EstrategiaProducao estrategiaMaximoProdutos = new EstrategiaMaximoProdutos();
+        EstrategiaProducao estrategiaMaiorDemanda = new EstrategiaMaiorDemanda();
 
         int opcao;
         int opcaoSecundaria;
@@ -156,13 +166,13 @@ public class Main {
                                 opcao3 = lerInteiroEntre(scanner, 0 , 3);
                                 switch(opcao3){
                                     case 1:
-                                        fabricarProduto(gerenciador, cremeDeMaos);
+                                        fabricarProdutoEspecifico(gerenciador, cremeDeMaos);
                                     break;
                                     case 2:
-                                        fabricarProduto(gerenciador, esfoliante);
+                                        fabricarProdutoEspecifico(gerenciador, esfoliante);
                                     break;
                                     case 3:
-                                        fabricarProduto(gerenciador, hidratante);
+                                        fabricarProdutoEspecifico(gerenciador, hidratante);
                                     break;
                                 }
                             case 0:
@@ -197,13 +207,13 @@ public class Main {
                         opcaoSecundaria = lerInteiroEntre(scanner, 0, 3);
                         switch(opcaoSecundaria){
                             case 1:
-                                gerenciador.setEstrategia();
+                                gerenciador.setEstrategia(estrategiaOrdemChegada);
                                 break;
                             case 2:
-                                gerenciador.setEstrategia();
+                                gerenciador.setEstrategia(estrategiaMaiorDemanda);
                                 break;
                             case 3:
-                                gerenciador.setEstrategia();
+                                gerenciador.setEstrategia(estrategiaMaximoProdutos);
                                 break;
                             case 0:
                                 break;
@@ -317,7 +327,7 @@ public class Main {
     private static void atualizarDemanda(
             Scanner scanner,
             GerenciadorProducao gerenciador,
-            String tipoProduto
+            TipoProduto tipoProduto
     ) {
         System.out.print("\nInforme a quantidade de produtos: ");
         int quantidade = lerInteiro(scanner);
@@ -329,23 +339,31 @@ public class Main {
                     + quantidade + " unidades."
             );
         } else {
-            System.out.println("Quantidade invalida para a demanda.");
+            Demanda demanda = new Demanda(tipoProduto, quantidade, gerenciador.getCustoproducao(quantidade));
+            gerenciador.registrarDemanda(demanda);
         }
     }
 
-    private static void fabricarProduto(
+    private static void fabricarProdutoEspecifico(
             GerenciadorProducao gerenciador,
             Produto produto) {
-        System.out.println(
-                "\nIniciando producao de "
-                + produto.getNome() + "..."
-        );
 
-        gerenciador.fabricarDemanda(
-                produto.getTipo(),
-                produto
-        );
-    }
+        Demanda demanda = gerenciador.buscarDemandaPendente(produto.getTipo());
+        if (demanda != null){
+            System.out.println(
+                    "\nIniciando producao de "
+                    + produto.getNome() + "..."
+            );
+
+            gerenciador.fabricarDemanda(
+                    demanda,
+                    produto
+            );
+        }
+        else {
+            System.out.println("Não existem demandas pendentes de " + produto.getNome());
+        }
+    } 
 
     private static void exibirEstoque(GerenciadorProducao gerenciador) {
         MateriaPrima materiaPrima = gerenciador.getMateriaPrima();

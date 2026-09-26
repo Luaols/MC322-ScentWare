@@ -1,7 +1,7 @@
 import java.util.List;
-public interface EstrategiaMaiorDemanda extends EstrategiaProducao{
+public class EstrategiaMaiorDemanda implements EstrategiaProducao{
     @Override 
-    default Demanda selecionarDemanda(List<Demanda> demandas, double orcamentoDisponivel){
+    public Demanda selecionarDemanda(List<Demanda> demandas, double orcamentoDisponivel){
         if (demandas.isEmpty()){
             return null;
         }
@@ -16,7 +16,7 @@ public interface EstrategiaMaiorDemanda extends EstrategiaProducao{
         return maiorDemanda;
     }
     @Override 
-    default String getNomeEstrategia(){
+    public String getNomeEstrategia(){
         return "Estratégia de fabricação da maior demanda de produtos";
     } 
 }

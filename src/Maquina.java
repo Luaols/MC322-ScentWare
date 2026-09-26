@@ -7,6 +7,8 @@ public abstract class Maquina implements Auditavel {
     private double probabilidadeFalha;
     private double custoOperacao;
     private double health;
+    private double maximoDesgaste;
+    private static int falhas = 0;
 
     private Random random = new Random();
 
@@ -15,7 +17,8 @@ public abstract class Maquina implements Auditavel {
             double capacidadeMaxima,
             double probabilidadeFalha,
             double custoOperacao,
-            double health
+            double health,
+            double maximoDesgaste
     ) {
         this.nome = nome;
         this.ligada = false;
@@ -23,12 +26,17 @@ public abstract class Maquina implements Auditavel {
         this.probabilidadeFalha = probabilidadeFalha;
         this.custoOperacao = custoOperacao;
         this.health = health;
+        this.maximoDesgaste = maximoDesgaste;
     }
 
     public abstract boolean processar(Produto produto);
 
     public abstract String getTipo();
 
+    @Override 
+    public String gerarRelatorioDiagnostico(){
+        return(nome + " | Probabilidade de falha : " + probabilidadeFalha + " | Saúde : " + health + "% | Precisa de manutenção : Sim");
+    }
     @Override 
     public boolean precisaManutencao(){
         if (health < 30){
@@ -38,11 +46,17 @@ public abstract class Maquina implements Auditavel {
             return false;
         }
     }
+    public boolean quebrada(){
+        if (health <= 0){
+            return true;
+        }
+        return false;
+    }
+    public void contabilizarFalha(){
+        falhas += 1;
+    }    
     public void reparar(){
         health = 100;
-    }
-    public double getHealth(){
-        return health;
     }
 
     public void ligar() {
@@ -76,5 +90,8 @@ public abstract class Maquina implements Auditavel {
     // Verifica se a falha acontece de acordo com a probabilidade da maquina
     protected boolean verificarFalha() {
         return random.nextDouble() < probabilidadeFalha;
+    }
+    protected void desgasteAleatorio(){
+        health -= random.nextDouble() * maximoDesgaste ;
     }
 }

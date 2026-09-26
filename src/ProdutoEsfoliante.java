@@ -2,10 +2,7 @@ public class ProdutoEsfoliante extends Produto {
     public ProdutoEsfoliante(String id, String nome, double quantidadeMateriaPrimaPorUnidade) {
         super(id, nome, quantidadeMateriaPrimaPorUnidade, 0.9);
     }
-    @Override 
-    public String gerarRelatorioDiagnostico(){
-        return("" + getQualidade());
-    }
+
     @Override
     public boolean precisaManutencao(){
         if (getProbabilidadeFalhaAcumulada() >= 1.0){
@@ -27,7 +24,7 @@ public class ProdutoEsfoliante extends Produto {
     }
 
     @Override
-    public String getTipo() {
-        return "Esfoliante";
+    public TipoProduto getTipo() {
+        return TipoProduto.ESFOLIANTE;
     }
 }

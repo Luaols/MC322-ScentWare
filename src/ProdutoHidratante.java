@@ -3,10 +3,6 @@ public class ProdutoHidratante extends Produto {
         super(id, nome, quantidadeMateriaPrimaPorUnidade, 0.5);
     }
     
-@Override 
-    public String gerarRelatorioDiagnostico(){
-        return("" + getQualidade());
-    }
     @Override
     public boolean precisaManutencao(){
         if (getProbabilidadeFalhaAcumulada() >= 1.0){
@@ -28,7 +24,7 @@ public class ProdutoHidratante extends Produto {
     }
 
     @Override
-    public String getTipo() {
-        return "Hidratante";
+    public TipoProduto getTipo() {
+        return TipoProduto.HIDRATANTE;
     }
 }

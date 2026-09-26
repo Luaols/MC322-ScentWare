@@ -4,13 +4,10 @@ public class MaquinaEmpacotadora extends Maquina {
             double capacidadeMaxima,
             double probabilidadeFalha,
             double custoOperacao,
-            double health
+            double health,
+            double maximoDesgaste
     ) {
-        super(nome, capacidadeMaxima, probabilidadeFalha, custoOperacao, health);
-    }
-    @Override 
-    public String gerarRelatorioDiagnostico(){
-        return("" + getHealth());
+        super(nome, capacidadeMaxima, probabilidadeFalha, custoOperacao, health, maximoDesgaste);
     }
 
     @Override
@@ -21,7 +18,7 @@ public class MaquinaEmpacotadora extends Maquina {
         if (verificarFalha()) {
             produto.aumentarProbabilidadeFalha(getProbabilidadeFalha());
         }
-
+        desgasteAleatorio();
         desligar();
 
         return true;

@@ -5,19 +5,22 @@ public class GerenciadorProducao implements EstrategiaProducao{
     private ArrayList<Demanda> demandas;
     private ArrayList<Produto> produtosFabricados;
     private ArrayList<Maquina> maquinas;
+    private ArrayList<Produto> produtosModelos;
     private MateriaPrima materiaPrima;
     private double budget;
     private EstrategiaProducao estrategiaAtual;
 
     public GerenciadorProducao(
             MateriaPrima materiaPrima,
-            double budget
+            double budget,
+            ArrayList<Produto> produtosModelos
     ) {
         this.materiaPrima = materiaPrima;
         this.budget = budget;
         this.demandas = new ArrayList<>();
         this.produtosFabricados = new ArrayList<>();
         this.maquinas = new ArrayList<>();
+        this.produtosModelos = produtosModelos;
     }
     @Override
     public Demanda selecionarDemanda(List<Demanda> demandas, double orcamentoDisponivel){
@@ -34,7 +37,15 @@ public class GerenciadorProducao implements EstrategiaProducao{
     public void executarProximaProducao(){
         Demanda proximaProducao = estrategiaAtual.selecionarDemanda(demandas, budget);
         if (proximaProducao != null){
-            fabricarDemanda(proximaProducao.getTipoProduto(), )
+            for (Produto produtoModelo : produtosModelos){
+                if (produtoModelo.getTipo() == proximaProducao.getTipoProduto()){
+                    proximaProducao.setStatus(StatusDemanda.EM_PRODUCAO);
+                    fabricarDemanda(proximaProducao, produtoModelo);
+                }
+            }
+        }
+        else {
+            System.out.println("Não existem demandas viáveis na estratégia atual");
         }
     }
     public void gerarAuditoriaGeral(){
@@ -42,15 +53,13 @@ public class GerenciadorProducao implements EstrategiaProducao{
         System.out.println();
         if (!maquinas.isEmpty()){
             for (Maquina maquina : maquinas){
-                System.out.print("Nome do equipamento : " + maquina.getNome() + " Saúde : " + maquina.getHealth() + " Precisa de manutenção : ");
-                if (maquina.precisaManutencao()){
-                    System.out.println("Sim");
-                }
-                else {
-                    System.out.println("Não"); 
-                }
+                System.out.println("=== MÁQUINAS ===");
+                maquina.gerarRelatorioDiagnostico();
             }
-            
+            for (Produto produto : produtosFabricados){
+                System.out.println("=== PRODUTOS ===");
+                produto.gerarRelatorioDiagnostico();
+            }   
         }
     }
 
@@ -62,21 +71,22 @@ public class GerenciadorProducao implements EstrategiaProducao{
         maquinas.add(maquina);
     }
 
-    public Demanda buscarDemanda(String tipoProduto) {
+    public Demanda buscarDemandaPendente(TipoProduto tipoProduto) {
         for (Demanda demanda : demandas) {
-            if (demanda.getTipoProduto().equals(tipoProduto)) {
+            if (demanda.getTipoProduto() == tipoProduto && demanda.getStatus() == StatusDemanda.PENDENTE) {
                 return demanda;
             }
         }
         return null;
     }
 
-    public boolean atualizarDemanda(String tipoProduto, int quantidade) {
-        Demanda demanda = buscarDemanda(tipoProduto);
+    public boolean atualizarDemanda(TipoProduto tipoProduto, int quantidade) {
+        Demanda demanda = buscarDemandaPendente(tipoProduto);
         if (demanda == null || quantidade < 0) {
             return false;
         }
         demanda.atualizarQuantidade(quantidade);
+        demanda.setCustoTotal(calcularCustoProducao(quantidade));
         return true;
     }
 
@@ -96,17 +106,8 @@ public class GerenciadorProducao implements EstrategiaProducao{
         return true;
     }
 
-    public boolean fabricarDemanda(String tipoProduto, Produto produtoModelo) {
-        Demanda demanda = buscarDemanda(tipoProduto);
+    public boolean fabricarDemanda(Demanda demanda, Produto produtoModelo) {
 
-        if (demanda == null) {
-            System.out.println("Demanda nao encontrada.");
-            return false;
-        }
-        if (demanda.getStatus() == StatusDemanda.CONCLUIDA) {
-            System.out.println("Essa demanda ja foi atendida.");
-            return false;
-        }
         if (demanda.getQuantidadeProdutos() <= 0) {
             System.out.println("Nao ha produtos pendentes nessa demanda.");
             return false;
@@ -150,6 +151,10 @@ public class GerenciadorProducao implements EstrategiaProducao{
             boolean aprovado = true;
 
             for (Maquina maquina : maquinas) {
+                if (maquina.quebrada()){
+                    maquina.contabilizarFalha();
+                    maquina.reparar();
+                }
                 budget -= maquina.getCustoOperacao();
                 if (!maquina.processar(produto)) {
                     aprovado = false;
@@ -162,7 +167,7 @@ public class GerenciadorProducao implements EstrategiaProducao{
                 produtosAprovados++;
             }
         }
-
+        demanda.atender(demanda);
         int produtosRejeitados = quantidadeSolicitada - produtosAprovados;
 
         System.out.println("\n=== RESULTADO DA PRODUCAO ===");
@@ -195,7 +200,9 @@ public class GerenciadorProducao implements EstrategiaProducao{
         }
         return custoPorProduto * quantidadeProdutos;
     }
-
+    public double getCustoproducao(int quantidadeProdutos){
+        return calcularCustoProducao(quantidadeProdutos);
+    }
     private Produto criarProduto(Produto produtoModelo, int numeroProduto) {
         String id = produtoModelo.getId() + "-" + numeroProduto;
 
@@ -270,7 +277,7 @@ public class GerenciadorProducao implements EstrategiaProducao{
         if (!demandas.isEmpty()){
             for (Demanda demanda : demandas){
                 System.out.println(" Tipo : " + demanda.getTipoProduto() + " Quantidade : " 
-                + demanda.getQuantidadeProdutos() + " Status : " + demanda.getStatus());
+                + demanda.getQuantidadeProdutos() + " Status : " + demanda.getStatus().getNome());
             }
         }
         else{

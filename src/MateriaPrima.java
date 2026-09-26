@@ -18,7 +18,7 @@ public class MateriaPrima {
         this.unidade = unidade;
         this.custoPorUnidade = custoPorUnidade;
     }
-
+    
     public boolean consumir(double quantidade) {
         if (verificarDisponibilidade(quantidade)) {
             this.quantidade -= quantidade;

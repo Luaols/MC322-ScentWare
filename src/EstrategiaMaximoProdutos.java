@@ -1,22 +1,29 @@
 import java.util.List;
 
-public interface EstrategiaMaximoProdutos extends EstrategiaProducao{
+public class EstrategiaMaximoProdutos implements EstrategiaProducao{
     @Override 
-    default Demanda selecionarDemanda(List<Demanda> demandas, double orcamentoDisponivel){
+    public Demanda selecionarDemanda(List<Demanda> demandas, double orcamentoDisponivel){
+
         if (demandas.isEmpty()){
             return null;
         }
-        double orcamento = 0;
+
+        double quantidadeProdutos = 0;
         Demanda demandaMaximoProdutos = null;
+
         for ( Demanda demanda : demandas ){
-            if (demanda.getStatus() == StatusDemanda.PENDENTE && ){
+            if (
+                demanda.getStatus() == StatusDemanda.PENDENTE && 
+                demanda.viabilidadeFinanceira(orcamentoDisponivel) && 
+                demanda.getQuantidadeProdutos() > quantidadeProdutos){
                 demandaMaximoProdutos = demanda;
+                quantidadeProdutos = demanda.getQuantidadeProdutos();
             }
         }
         return (demandaMaximoProdutos);
     }
     @Override 
-    default String getNomeEstrategia(){
+    public String getNomeEstrategia(){
         return "Estratégia de maximização de produtos fabricados";
     }
 }
