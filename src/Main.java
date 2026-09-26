@@ -232,8 +232,10 @@ public class Main {
                                 break;
                             case 2:
                                 gerenciador.detalharMaquinas();
+                                break;
                             case 3:
                                 gerenciador.detalharProdutos();
+                                break;
                             case 0:
                                 break;
                         }

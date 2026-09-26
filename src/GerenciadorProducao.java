@@ -150,6 +150,7 @@ public class GerenciadorProducao implements EstrategiaProducao{
             );
             return false;
         }
+        System.out.println("\n[AVISO] - Iniciando produção de "+ produtoModelo.getNome());
 
         int produtosAprovados = 0;
 
