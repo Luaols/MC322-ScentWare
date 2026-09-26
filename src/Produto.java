@@ -31,10 +31,10 @@ public abstract class Produto implements Auditavel {
     @Override 
     public String gerarRelatorioDiagnostico(){
         if (precisaManutencao()){
-            return(" | Qualidade : " + qualidade + "% | Precisa de manutenção : Sim");
+            return(" | Qualidade : " + qualidade + " | Precisa de manutenção : Sim");
         }
         else {
-            return(" | Qualidade : " + qualidade + "% | Precisa de manutenção : Não");
+            return(" | Qualidade : " + qualidade + " | Precisa de manutenção : Não");
         }
     }
     @Override

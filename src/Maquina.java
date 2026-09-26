@@ -96,7 +96,7 @@ public abstract class Maquina implements Auditavel {
 
     // Verifica se a falha acontece de acordo com a probabilidade da maquina
     protected boolean verificarFalha() {
-        return random.nextDouble() < probabilidadeFalha;
+        return random.nextDouble() < probabilidadeFalha * (100 - health)/100.0;
     }
     protected void desgasteAleatorio(){
         health -= random.nextDouble() * maximoDesgaste ;
