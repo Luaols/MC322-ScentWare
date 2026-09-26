@@ -9,7 +9,7 @@ public class Main {
 
         int cenario = 0; 
         Cenario cenarioAtual = null;
-        while(cenario < 1 && cenario > 2) {
+        while(cenario < 1 || cenario > 2) {
 
             System.out.println("Escolha com qual cenário de operação deseja executar:");
             System.out.println("1 - Ideal");
@@ -59,12 +59,18 @@ public class Main {
                 "Esfoliante Corporal",
                 40.0
         );
+        //Estratégias de produção
+        EstrategiaProducao estrategiaOrdemChegada = new EstrategiaOrdemChegada();
+        EstrategiaProducao estrategiaMaximoProdutos = new EstrategiaMaximoProdutos();
+        EstrategiaProducao estrategiaMaiorDemanda = new EstrategiaMaiorDemanda();
+
 
         // Gerenciador da fabrica
         GerenciadorProducao gerenciador = new GerenciadorProducao(
                 oleoAmendoas,
                 cenarioAtual.getBudget(),
-                new ArrayList<>(List.of(cremeDeMaos, hidratante, esfoliante))
+                new ArrayList<>(List.of(cremeDeMaos, hidratante, esfoliante)),
+                estrategiaOrdemChegada
         );
 
         // Demandas iniciais
@@ -105,11 +111,7 @@ public class Main {
                         cenarioAtual.getMaximoDesgasteInspecao()
                 )
         );
-        //Estratégias de produção
-        EstrategiaProducao estrategiaOrdemChegada = new EstrategiaOrdemChegada();
-        EstrategiaProducao estrategiaMaximoProdutos = new EstrategiaMaximoProdutos();
-        EstrategiaProducao estrategiaMaiorDemanda = new EstrategiaMaiorDemanda();
-
+    
         int opcao;
         int opcaoSecundaria;
         int opcao3;
@@ -144,6 +146,7 @@ public class Main {
                                     case 0:
                                         break;
                                 }
+                                break;
                             case 2:
                                 System.out.println("\n=== DEMANDAS ===");
                                 gerenciador.exibirDemandas();
@@ -151,7 +154,7 @@ public class Main {
                             case 0:
                                 break;
                         }
-
+                        break;
                 case 2:
                         subMenuFabricar();
                         System.out.print("Escolha uma opcao: ");
@@ -175,9 +178,11 @@ public class Main {
                                         fabricarProdutoEspecifico(gerenciador, hidratante);
                                     break;
                                 }
+                                break;
                             case 0:
                                 break;
                         }
+                        break;
 
                 case 3:
                         subMenuConsultar();
@@ -194,6 +199,7 @@ public class Main {
                             case 0:
                                 break;
                         }
+                        break;
                 case 4:
                     comprarMateriaPrima(
                             scanner,
@@ -218,6 +224,7 @@ public class Main {
                             case 0:
                                 break;
                         }
+                        break;
                 case 6:
                         subMenuAuditoria();
                         System.out.print("Escolha uma opcao: ");
@@ -233,11 +240,12 @@ public class Main {
                             case 0:
                                 break;
                         }
+                        break;
                 case 0:
                     System.out.println("\nEncerrando a ScentWare...");
                     System.out.println("Ate a proxima! :)");
                     break;
-            }            
+            }          
         } while (opcao != 0);
         scanner.close();
     }

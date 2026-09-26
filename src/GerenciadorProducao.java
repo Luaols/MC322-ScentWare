@@ -13,7 +13,8 @@ public class GerenciadorProducao implements EstrategiaProducao{
     public GerenciadorProducao(
             MateriaPrima materiaPrima,
             double budget,
-            ArrayList<Produto> produtosModelos
+            ArrayList<Produto> produtosModelos,
+            EstrategiaProducao estrategiaAtual
     ) {
         this.materiaPrima = materiaPrima;
         this.budget = budget;
@@ -21,6 +22,7 @@ public class GerenciadorProducao implements EstrategiaProducao{
         this.produtosFabricados = new ArrayList<>();
         this.maquinas = new ArrayList<>();
         this.produtosModelos = produtosModelos;
+        this.estrategiaAtual = estrategiaAtual;
     }
     @Override
     public Demanda selecionarDemanda(List<Demanda> demandas, double orcamentoDisponivel){
@@ -52,15 +54,18 @@ public class GerenciadorProducao implements EstrategiaProducao{
         System.out.println("AUDITÓRIA GERAL");
         System.out.println();
         if (!maquinas.isEmpty()){
+            System.out.println("=== MÁQUINAS ===");
             for (Maquina maquina : maquinas){
-                System.out.println("=== MÁQUINAS ===");
                 maquina.gerarRelatorioDiagnostico();
             }
-            for (Produto produto : produtosFabricados){
-                System.out.println("=== PRODUTOS ===");
-                produto.gerarRelatorioDiagnostico();
-            }   
         }
+        if (!produtosFabricados.isEmpty()){
+            System.out.println("=== PRODUTOS ===");
+            for (Produto produto : produtosFabricados){
+                produto.gerarRelatorioDiagnostico();
+            }  
+        } 
+        
     }
 
     public void registrarDemanda(Demanda demanda) {

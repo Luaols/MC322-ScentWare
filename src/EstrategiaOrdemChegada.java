@@ -15,6 +15,6 @@ public class EstrategiaOrdemChegada implements EstrategiaProducao{
     }
     @Override 
     public String getNomeEstrategia(){
-        return "Estratégia de ordem de chegada";
+        return "Ordem de chegada";
     }
 }

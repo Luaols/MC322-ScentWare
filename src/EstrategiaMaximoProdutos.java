@@ -24,6 +24,6 @@ public class EstrategiaMaximoProdutos implements EstrategiaProducao{
     }
     @Override 
     public String getNomeEstrategia(){
-        return "Estratégia de maximização de produtos fabricados";
+        return "Maximização de produtos fabricados";
     }
 }
