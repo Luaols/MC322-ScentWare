@@ -123,7 +123,7 @@ public class Main {
             opcao = lerInteiroEntre(scanner, 0, 6);
 
             switch (opcao){
-
+                //submenu Demandas
                 case 1: 
                         subMenuDemandas();
                         System.out.print("Escolha uma opcao: ");

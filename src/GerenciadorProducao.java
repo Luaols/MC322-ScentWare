@@ -281,8 +281,8 @@ public class GerenciadorProducao implements EstrategiaProducao{
     public void exibirDemandas(){
         if (!demandas.isEmpty()){
             for (Demanda demanda : demandas){
-                System.out.println(" Tipo : " + demanda.getTipoProduto() + " Quantidade : " 
-                + demanda.getQuantidadeProdutos() + " Status : " + demanda.getStatus().getNome());
+                System.out.println(" Tipo : " + demanda.getTipoProduto().getNome() + " | Quantidade : " 
+                + demanda.getQuantidadeProdutos() + " | Status : " + demanda.getStatus().getNome());
             }
         }
         else{
