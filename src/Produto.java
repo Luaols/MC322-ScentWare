@@ -30,7 +30,12 @@ public abstract class Produto implements Auditavel {
 
     @Override 
     public String gerarRelatorioDiagnostico(){
-        return(nome + "| Qualidade: " + qualidade + "% | Probabilidade de falha acumulada : " + probabilidadeFalhaAcumulada);
+        if (precisaManutencao()){
+            return(" | Qualidade : " + qualidade + "% | Precisa de manutenção : Sim");
+        }
+        else {
+            return(" | Qualidade : " + qualidade + "% | Precisa de manutenção : Não");
+        }
     }
     @Override
     public boolean precisaManutencao(){

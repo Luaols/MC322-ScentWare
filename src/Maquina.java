@@ -35,7 +35,14 @@ public abstract class Maquina implements Auditavel {
 
     @Override 
     public String gerarRelatorioDiagnostico(){
-        return(nome + " | Probabilidade de falha : " + probabilidadeFalha + " | Saúde : " + health + "% | Precisa de manutenção : Sim");
+        if (precisaManutencao()){
+        return(" | Saúde : " + health + "% | Número de falhas : " 
+        + falhas + " | Precisa de manutenção : Sim");
+        }
+        else{
+             return(" | Saúde : " + health + "% | Número de falhas : " 
+        + falhas + " | Precisa de manutenção : Não ");
+        }
     }
     @Override 
     public boolean precisaManutencao(){

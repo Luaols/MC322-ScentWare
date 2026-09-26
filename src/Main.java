@@ -231,9 +231,9 @@ public class Main {
                                 gerenciador.gerarAuditoriaGeral();                            
                                 break;
                             case 2:
-                              
+                                gerenciador.detalharMaquinas();
                             case 3:
-                             
+                                gerenciador.detalharProdutos();
                             case 0:
                                 break;
                         }

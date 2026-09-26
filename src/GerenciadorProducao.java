@@ -51,19 +51,13 @@ public class GerenciadorProducao implements EstrategiaProducao{
         }
     }
     public void gerarAuditoriaGeral(){
-        System.out.println("AUDITÓRIA GERAL");
+        System.out.println("=== AUDITÓRIA GERAL ===");
         System.out.println();
         if (!maquinas.isEmpty()){
-            System.out.println("=== MÁQUINAS ===");
-            for (Maquina maquina : maquinas){
-                maquina.gerarRelatorioDiagnostico();
-            }
+            detalharMaquinas();
         }
         if (!produtosFabricados.isEmpty()){
-            System.out.println("=== PRODUTOS ===");
-            for (Produto produto : produtosFabricados){
-                produto.gerarRelatorioDiagnostico();
-            }  
+            detalharProdutos();
         } 
         
     }
@@ -110,7 +104,22 @@ public class GerenciadorProducao implements EstrategiaProducao{
         materiaPrima.adicionarEstoque(quantidade);
         return true;
     }
-
+    public void detalharProdutos(){
+        System.out.println("[PRODUTOS]");
+        for (Produto produto : produtosFabricados){
+            System.out.println(produto.getNome() + " | Probabilidade de falha : " + produto.getProbabilidadeFalhaAcumulada() + 
+            produto.gerarRelatorioDiagnostico());
+        }
+        System.out.println();
+    }
+    public void detalharMaquinas(){
+        System.out.println("[MÁQUINAS]");
+        for (Maquina maquina : maquinas){
+            System.out.println(maquina.getNome() + " | Probabilidade de falha : " + maquina.getProbabilidadeFalha() + 
+            maquina.gerarRelatorioDiagnostico());
+        }
+        System.out.println();
+    }
     public boolean fabricarDemanda(Demanda demanda, Produto produtoModelo) {
 
             if (demanda.getQuantidadeProdutos() <= 0) {
