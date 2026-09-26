@@ -84,7 +84,7 @@ public class Main {
                         "Homogeneizador",
                         1000.0,
                         cenarioAtual.getProbabilidadeFalhaHomogeneizador(),
-                        20.0,
+                        2.0,
                         100.0,
                         cenarioAtual.getMaximoDesgasteHomogeneizador()
                 )
@@ -95,7 +95,7 @@ public class Main {
                         "Empacotadora",
                         1000.0,
                         cenarioAtual.getProbabilidadeFalhaEmpacotador(),
-                        10.0,
+                        1.0,
                         100.0,
                         cenarioAtual.getMaximoDesgasteEmpacotador()
                 )
@@ -106,7 +106,7 @@ public class Main {
                         "Inspecao",
                         1000.0,
                         cenarioAtual.getProbabilidadeFalhaInspecao(),
-                        15.0,
+                        1.5,
                         100.0,
                         cenarioAtual.getMaximoDesgasteInspecao()
                 )
