@@ -7,7 +7,7 @@ public class EstrategiaOrdemChegada implements EstrategiaProducao{
             return null;
         }
         for ( Demanda demanda : demandas ){
-            if (demanda.getStatus() == StatusDemanda.PENDENTE){
+            if (demanda.getStatus() == StatusDemanda.PENDENTE && demanda.getQuantidadeProdutos() > 0){
                 return demanda;
             }
         }

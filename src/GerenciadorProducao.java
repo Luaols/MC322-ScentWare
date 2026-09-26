@@ -113,8 +113,8 @@ public class GerenciadorProducao implements EstrategiaProducao{
 
     public boolean fabricarDemanda(Demanda demanda, Produto produtoModelo) {
 
-        if (demanda.getQuantidadeProdutos() <= 0) {
-            System.out.println("Nao ha produtos pendentes nessa demanda.");
+            if (demanda.getQuantidadeProdutos() <= 0) {
+            System.out.println("[AVISO] - Não há produtos pendentes nessa demanda.");
             return false;
         }
 
@@ -158,7 +158,12 @@ public class GerenciadorProducao implements EstrategiaProducao{
             for (Maquina maquina : maquinas) {
                 if (maquina.quebrada()){
                     maquina.contabilizarFalha();
+                    System.out.println("\n[AVISO] - Produção interrompida!");
+                    System.out.println("[AVISO] - A máquina "+ maquina.getNome()+
+                    " quebrou. O conserto já está a caminho");
                     maquina.reparar();
+                    System.out.println("[AVISO] - Máquina " + maquina.getNome() + " reparada com sucesso");
+                    System.out.println("[AVISO] - Produção retomada");
                 }
                 budget -= maquina.getCustoOperacao();
                 if (!maquina.processar(produto)) {

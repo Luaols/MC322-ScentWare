@@ -9,14 +9,14 @@ public class Main {
 
         int cenario = 0; 
         Cenario cenarioAtual = null;
-        while(cenario < 1 || cenario > 2) {
+        System.out.println("Cenários de operação disponíveis : ");
+        System.out.println("1 - Ideal");
+        System.out.println("2 - Apocalíptico");
+        System.out.print("Escolha com qual cenário deseja executar : ");
 
-            System.out.println("Escolha com qual cenário de operação deseja executar:");
-            System.out.println("1 - Ideal");
-            System.out.println("2 - Apocalíptico");
-            System.out.println();
 
-            cenario = lerInteiro(scanner);
+
+            cenario = lerInteiroEntre(scanner, 1, 2);
         
             switch(cenario){
                 case 1 :
@@ -24,11 +24,8 @@ public class Main {
                     break;
                 case 2 :
                     cenarioAtual = Cenario.APOCALIPTICO;
-                    break;
-                default :
-                    System.out.println("Opção inválida");
-            }
-        } 
+                    break; 
+            } 
         
 
 
@@ -342,7 +339,7 @@ public class Main {
 
         if (gerenciador.atualizarDemanda(tipoProduto, quantidade)) {
             System.out.println(
-                    "Demanda de " + tipoProduto
+                    "Demanda de " + tipoProduto.getNome()
                     + " atualizada para "
                     + quantidade + " unidades."
             );
@@ -432,7 +429,7 @@ public class Main {
                 return valorInteiro;
             }
             else{
-                System.out.println("\nOpcao invalida.");
+                System.out.print("\n[OPÇÃO INVÁLIDA] - Insira um número inteiro entre " + a + " e " + b + " : ");
             }
         }
     }
