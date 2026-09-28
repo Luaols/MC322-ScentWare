@@ -100,5 +100,8 @@ public abstract class Maquina implements Auditavel {
     }
     protected void desgasteAleatorio(){
         health -= random.nextDouble() * maximoDesgaste ;
+        if (health < 0){
+            health = 0;
+        }
     }
 }
