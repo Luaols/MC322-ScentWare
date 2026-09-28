@@ -167,13 +167,15 @@ public class Main {
                                 switch(opcao3){
                                     case 1:
                                         fabricarProdutoEspecifico(gerenciador, cremeDeMaos);
-                                    break;
-                                    case 2:
+                                        break;
+                                        case 2:
                                         fabricarProdutoEspecifico(gerenciador, esfoliante);
-                                    break;
+                                        break;
                                     case 3:
                                         fabricarProdutoEspecifico(gerenciador, hidratante);
-                                    break;
+                                        break;
+                                    case 0:
+                                        break;
                                 }
                                 break;
                             case 0:
