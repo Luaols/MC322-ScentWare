@@ -38,7 +38,7 @@ public class Demanda {
         return status ;
     }
     public boolean viabilidadeFinanceira(double budget){
-        if (custoTotal >= budget){
+        if (custoTotal <= budget){
             return true;
         }
         return false;
