@@ -70,12 +70,7 @@ public class Main {
                 estrategiaOrdemChegada,
                 cenarioAtual.getRiscoInicialProduto()
         );
-
-        // Começamos com uma demanda vazia de cada produto, que pode ser atualizada pelo menu.
-        gerenciador.registrarDemanda(new Demanda(hidratante.getTipo(), 0, 0));
-        gerenciador.registrarDemanda(new Demanda(cremeDeMaos.getTipo(), 0, 0));
-        gerenciador.registrarDemanda(new Demanda(esfoliante.getTipo(), 0, 0));
-
+        
         // As taxas de falha e desgaste mudam de acordo com o cenário escolhido.
         gerenciador.adicionarMaquina(
                 new MaquinaHomogeneizador(
