@@ -50,3 +50,51 @@ hierarquia de máquinas.
 Com essas mudanças, procuramos manter a identidade da ScentWare e as ideias que já tínhamos definido na primeira
 tarefa, mas adaptando a fábrica aos novos conceitos trabalhados na disciplina, como herança, polimorfismo, 
 encapsulamento, coleções e aleatoriedade.
+
+
+EVOLUÇÃO DA SCENTWARE NA TAREFA 3
+Na terceira tarefa, uma das principais mudanças foi permitir que a ScentWare escolha de formas
+diferentes qual demanda será produzida primeiro. Para fazer isso, utilizamos o padrão Strategy e
+criamos três opções: ordem de chegada, maior demanda e máximo de produtos dentro do budget.
+Achamos interessante permitir que essa estratégia pudesse ser trocada durante a própria execução,
+porque assim a fábrica não fica presa a uma única forma de organizar a produção. O
+GerenciadorProducao guarda apenas a estratégia que está sendo usada naquele momento e trabalha
+através da interface EstrategiaProducao, sem precisar saber como cada uma faz a escolha.
+Também mudamos a forma de controlar o estado das demandas. Em vez de trabalhar com um controle mais
+simples, criamos o enum StatusDemanda, com os estados pendente, em produção, concluída e cancelada.
+As mudanças entre esses estados ficaram concentradas na própria classe Demanda, principalmente para
+evitar situações que não fariam sentido, como concluir uma demanda que já foi cancelada.
+Uma demanda é cancelada quando não existe orçamento ou matéria-prima suficiente para atendê-la.
+Também deixamos na classe Demanda os cálculos relacionados ao consumo estimado e à viabilidade
+financeira, já que eles dependem diretamente da quantidade de produtos que ainda falta fabricar.
+Outra parte adicionada nesta tarefa foi a auditoria. Para isso, criamos a interface Auditavel, que
+é implementada tanto por Produto quanto por Maquina. A ideia foi conseguir tratar os dois da mesma
+forma na hora de gerar uma auditoria geral, mesmo sendo objetos de partes diferentes da fábrica.
+No caso das máquinas, mostramos informações como saúde, falhas e necessidade de manutenção. Para
+os produtos, mostramos qualidade, risco acumulado e lote.
+Também adicionamos desgaste às máquinas. Elas começam com saúde 100 e perdem um pouco de saúde
+conforme são utilizadas. Com isso, uma máquina mais desgastada também passa a ter uma chance maior
+de apresentar falhas. Quando a saúde chega a zero, ela precisa ser reparada antes de continuar
+funcionando. Além disso, abaixo de 30 de saúde ela já aparece na auditoria como precisando de
+manutenção, mesmo que ainda seja capaz de operar.
+Para deixar essas diferenças mais fáceis de perceber durante a execução, criamos dois cenários.
+No cenário Ideal, a fábrica começa com mais orçamento e as máquinas apresentam menos falhas e
+desgaste. Já no cenário Apocalíptico, o orçamento é bem menor e as máquinas se desgastam e falham
+com mais facilidade. Os produtos também começam com riscos diferentes dependendo do cenário.
+A escolha entre os dois é feita no começo do programa.
+Outra coisa que organizamos melhor foi a diferença entre estoque e armazém. O estoque representa
+a matéria-prima disponível para a produção, que no nosso caso é o óleo de amêndoas. Já o armazém
+guarda os cosméticos que realmente terminaram o processo e foram aprovados na inspeção. Na consulta
+do armazém é possível ver informações como quantidade, qualidade, lote e risco dos produtos.
+Cada tentativa de produção também recebe um novo número de lote. Além disso, cada produto fabricado
+é criado como uma nova instância e começa novamente no estado "Aguardando". Fizemos dessa forma
+para que informações de uma fabricação anterior não acabem sendo reaproveitadas por outro produto.
+Por fim, reorganizamos o menu em submenus para não deixar todas as opções juntas. Separamos as
+funções relacionadas a demandas, fabricação, consultas, estratégias e auditoria. Também revisamos
+os comentários do código, principalmente porque esse foi um ponto observado na tarefa anterior.
+Tentamos comentar mais as decisões e partes menos óbvias da implementação, sem colocar comentários
+em operações simples que já são fáceis de entender pelo próprio código.
+No geral, tentamos fazer as mudanças da Tarefa 3 sem desmontar o que já estava funcionando nas
+versões anteriores. A ideia foi continuar evoluindo a mesma fábrica aos poucos, incorporando os
+novos conceitos da disciplina, mas mantendo a estrutura e a identidade que já tínhamos criado para
+a ScentWare.

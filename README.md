@@ -1,41 +1,38 @@
 # ScentWare
-
-Sistema desenvolvido para a disciplina MC322 - Programação Orientada a Objetos, da Universidade Estadual de Campinas (UNICAMP). Atualmente está na sua segunda versão.
-
-A ScentWare é uma fábrica de cosméticos corporais que criamos para simular, de forma simples, o processo de produção de produtos, desde o uso das matérias-primas até a inspeção final.
+Sistema desenvolvido para a disciplina MC322 - Programação Orientada a Objetos, da Universidade Estadual de Campinas (UNICAMP). Esta versão corresponde à Tarefa 3.
+A ScentWare é uma fábrica de cosméticos corporais que simula o processo de produção desde o controle das demandas e da matéria-prima até a inspeção e o armazenamento dos produtos acabados.
 
 ## Produtos
-
 - Hidratante corporal
 - Creme de mãos
-- Esfoliante
+- Esfoliante corporal
 
-## Matérias-primas
-
+## Matéria-prima
 - Óleo de amêndoas
 
-## Estrutura da planta
+## Estrutura atual do sistema
+A linha de produção possui:
+- estoque de matéria-prima;
+- homogeneizador;
+- empacotadora;
+- máquina de inspeção;
+- armazém de produtos acabados;
+- gerenciamento de demandas e orçamento;
+- estratégias de seleção de demandas;
+- auditoria de produtos e máquinas;
+- cenários Ideal e Apocalíptico.
 
-A primeira versão da ScentWare é composta por:
-
-- estoque de matérias-primas;
-- esteira de transporte;
-- homogeneizador (transforma matéria prima em produto);
-- máquina de embalagem
-- máquina de inspeção de qualidade
-- estação de inspeção;
-- sistema de interação via terminal (scanner).
-
-## Fluxo de produção
-
-A produção na ScentWare segue o seguinte fluxo:
-
-`Estoque → Esteira → Homogeneizador → Esteira → Controle de Qualidade → Produto Final`
-
-Antes de iniciar uma produção, o sistema verifica se há quantidade suficiente de matérias prima necessária para o produto escolhido. Os ingredientes são transportados individualmente até o homogeneizador, passam pela empacotadora e, logo após, o produto final segue pela esteira até a máquina de inspeção.
+## Tarefa 3
+Nesta versão foram adicionados o padrão Strategy, com estratégias por ordem de chegada, maior demanda e máximo de produtos, o enum `StatusDemanda`, a interface `Auditavel`, o desgaste progressivo das máquinas, os cenários Ideal e Apocalíptico e a consulta detalhada do armazém de produtos acabados.
+O menu também foi reorganizado em submenus para separar as funcionalidades de demandas, fabricação, consultas, estratégias e auditoria.
 
 ## Execução
-
 ```bash
 javac -d bin $(find src -name "*.java")
 java -cp bin Main
+```
+
+```powershell
+javac -d bin (Get-ChildItem -Path src -Filter *.java -Recurse).FullName
+java -cp bin Main
+```

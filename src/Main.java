@@ -29,7 +29,7 @@ public class Main {
         
 
 
-        // Materia-prima principal da fabrica
+        // Matéria-prima principal usada pelos três produtos da fábrica.
         MateriaPrima oleoAmendoas = new MateriaPrima(
                 "MP001",
                 "Oleo de Amendoas",
@@ -38,7 +38,7 @@ public class Main {
                 0.10
         );
 
-        // Produtos da ScentWare
+        // Estes objetos funcionam como modelos para criar os produtos de cada lote.
         Produto hidratante = new ProdutoHidratante(
                 "P001",
                 "Hidratante Corporal",
@@ -56,26 +56,27 @@ public class Main {
                 "Esfoliante Corporal",
                 40.0
         );
-        //Estratégias de produção
+        // As estratégias ficam separadas para podermos trocar a regra de escolha durante a execução.
         EstrategiaProducao estrategiaOrdemChegada = new EstrategiaOrdemChegada();
         EstrategiaProducao estrategiaMaximoProdutos = new EstrategiaMaximoProdutos();
         EstrategiaProducao estrategiaMaiorDemanda = new EstrategiaMaiorDemanda();
 
 
-        // Gerenciador da fabrica
+        // O gerenciador concentra a lógica da fábrica e deixa o Main mais voltado para os menus.
         GerenciadorProducao gerenciador = new GerenciadorProducao(
                 oleoAmendoas,
                 cenarioAtual.getBudget(),
                 new ArrayList<>(List.of(cremeDeMaos, hidratante, esfoliante)),
-                estrategiaOrdemChegada
+                estrategiaOrdemChegada,
+                cenarioAtual.getRiscoInicialProduto()
         );
 
-        // Demandas iniciais
+        // Começamos com uma demanda vazia de cada produto, que pode ser atualizada pelo menu.
         gerenciador.registrarDemanda(new Demanda(hidratante.getTipo(), 0, 0));
         gerenciador.registrarDemanda(new Demanda(cremeDeMaos.getTipo(), 0, 0));
         gerenciador.registrarDemanda(new Demanda(esfoliante.getTipo(), 0, 0));
 
-        // Maquinas da linha de producao
+        // As taxas de falha e desgaste mudam de acordo com o cenário escolhido.
         gerenciador.adicionarMaquina(
                 new MaquinaHomogeneizador(
                         "Homogeneizador",
@@ -120,7 +121,7 @@ public class Main {
             opcao = lerInteiroEntre(scanner, 0, 6);
 
             switch (opcao){
-                //submenu Demandas
+                // Submenu de demandas.
                 case 1: 
                         subMenuDemandas();
                         System.out.print("Escolha uma opcao: ");
@@ -339,6 +340,11 @@ public class Main {
         System.out.print("\nInforme a quantidade de produtos: ");
         int quantidade = lerInteiro(scanner);
 
+        if (quantidade < 0) {
+            System.out.println("A quantidade da demanda não pode ser negativa.");
+            return;
+        }
+
         if (gerenciador.atualizarDemanda(tipoProduto, quantidade)) {
             System.out.println(
                     "Demanda de " + tipoProduto.getNome()
@@ -346,7 +352,7 @@ public class Main {
                     + quantidade + " unidades."
             );
         } else {
-            Demanda demanda = new Demanda(tipoProduto, quantidade, gerenciador.getCustoproducao(quantidade));
+            Demanda demanda = new Demanda(tipoProduto, quantidade, gerenciador.getCustoProducao(quantidade));
             gerenciador.registrarDemanda(demanda);
         }
     }

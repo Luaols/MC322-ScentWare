@@ -1,7 +1,6 @@
 import java.util.ArrayList;
-import java.util.List;
 
-public class GerenciadorProducao implements EstrategiaProducao{
+public class GerenciadorProducao {
     private ArrayList<Demanda> demandas;
     private ArrayList<Produto> produtosFabricados;
     private ArrayList<Maquina> maquinas;
@@ -9,12 +8,15 @@ public class GerenciadorProducao implements EstrategiaProducao{
     private MateriaPrima materiaPrima;
     private double budget;
     private EstrategiaProducao estrategiaAtual;
+    private double riscoInicialProduto;
+    private int proximoLote;
 
     public GerenciadorProducao(
             MateriaPrima materiaPrima,
             double budget,
             ArrayList<Produto> produtosModelos,
-            EstrategiaProducao estrategiaAtual
+            EstrategiaProducao estrategiaAtual,
+            double riscoInicialProduto
     ) {
         this.materiaPrima = materiaPrima;
         this.budget = budget;
@@ -23,43 +25,32 @@ public class GerenciadorProducao implements EstrategiaProducao{
         this.maquinas = new ArrayList<>();
         this.produtosModelos = produtosModelos;
         this.estrategiaAtual = estrategiaAtual;
-    }
-    @Override
-    public Demanda selecionarDemanda(List<Demanda> demandas, double orcamentoDisponivel){
-        return estrategiaAtual.selecionarDemanda(demandas, orcamentoDisponivel);
+        this.riscoInicialProduto = riscoInicialProduto;
+        this.proximoLote = 1;
     }
 
-    @Override 
-    public String getNomeEstrategia(){
-        return estrategiaAtual.getNomeEstrategia();
+    public void setEstrategia(EstrategiaProducao novaEstrategia) {
+        if (novaEstrategia != null) {
+            estrategiaAtual = novaEstrategia;
+        }
     }
-    public void setEstrategia(EstrategiaProducao novaEstrategia){
-        estrategiaAtual = novaEstrategia;
-    }
-    public void executarProximaProducao(){
+
+    public void executarProximaProducao() {
+        // A escolha da próxima demanda fica por conta da estratégia ativa no momento
         Demanda proximaProducao = estrategiaAtual.selecionarDemanda(demandas, budget);
-        if (proximaProducao != null){
-            for (Produto produtoModelo : produtosModelos){
-                if (produtoModelo.getTipo() == proximaProducao.getTipoProduto()){
-                    proximaProducao.setStatus(StatusDemanda.EM_PRODUCAO);
-                    fabricarDemanda(proximaProducao, produtoModelo);
-                }
-            }
+
+        if (proximaProducao == null) {
+            System.out.println("Não existem demandas elegíveis na estratégia atual.");
+            return;
         }
-        else {
-            System.out.println("Não existem demandas viáveis na estratégia atual");
+
+        Produto produtoModelo = buscarProdutoModelo(proximaProducao.getTipoProduto());
+        if (produtoModelo == null) {
+            System.out.println("Não foi encontrado um produto correspondente à demanda.");
+            return;
         }
-    }
-    public void gerarAuditoriaGeral(){
-        System.out.println("=== AUDITÓRIA GERAL ===");
-        System.out.println();
-        if (!maquinas.isEmpty()){
-            detalharMaquinas();
-        }
-        if (!produtosFabricados.isEmpty()){
-            detalharProdutos();
-        } 
-        
+
+        fabricarDemanda(proximaProducao, produtoModelo);
     }
 
     public void registrarDemanda(Demanda demanda) {
@@ -84,6 +75,7 @@ public class GerenciadorProducao implements EstrategiaProducao{
         if (demanda == null || quantidade < 0) {
             return false;
         }
+
         demanda.atualizarQuantidade(quantidade);
         demanda.setCustoTotal(calcularCustoProducao(quantidade));
         return true;
@@ -95,7 +87,6 @@ public class GerenciadorProducao implements EstrategiaProducao{
         }
 
         double custo = quantidade * materiaPrima.getCustoPorUnidade();
-
         if (custo > budget) {
             return false;
         }
@@ -104,77 +95,71 @@ public class GerenciadorProducao implements EstrategiaProducao{
         materiaPrima.adicionarEstoque(quantidade);
         return true;
     }
-    public void detalharProdutos(){
-        System.out.println("[PRODUTOS]");
-        for (Produto produto : produtosFabricados){
-            System.out.println(produto.getNome() + " | Probabilidade de falha : " + produto.getProbabilidadeFalhaAcumulada() + 
-            produto.gerarRelatorioDiagnostico());
-        }
-        System.out.println();
-    }
-    public void detalharMaquinas(){
-        System.out.println("[MÁQUINAS]");
-        for (Maquina maquina : maquinas){
-            System.out.println(maquina.getNome() + " | Probabilidade de falha : " + maquina.getProbabilidadeFalha() + 
-            maquina.gerarRelatorioDiagnostico());
-        }
-        System.out.println();
-    }
-    public boolean fabricarDemanda(Demanda demanda, Produto produtoModelo) {
 
-            if (demanda.getQuantidadeProdutos() <= 0) {
-            System.out.println("[AVISO] - Não há produtos pendentes nessa demanda.");
+    public boolean fabricarDemanda(Demanda demanda, Produto produtoModelo) {
+        if (!demanda.iniciarProducao()) {
+            System.out.println("[AVISO] - Essa demanda não pode ser iniciada.");
             return false;
         }
 
         int quantidadeSolicitada = demanda.getQuantidadeProdutos();
-
         double materiaPrimaNecessaria = demanda.calcularMateriaPrimaNecessaria(produtoModelo);
+        double custoProducao = calcularCustoProducao(quantidadeSolicitada);
 
+        // Antes de começar o lote, verificamos se existem recursos suficientes para atender a demanda
         if (!materiaPrima.verificarDisponibilidade(materiaPrimaNecessaria)) {
+            demanda.cancelar();
             System.out.println(
-                    "Materia-prima insuficiente. Necessario: "
+                    "Matéria-prima insuficiente. Necessário: "
                     + materiaPrimaNecessaria + " "
                     + materiaPrima.getUnidade()
             );
+
+            System.out.println(
+                    "[AVISO] - Demanda cancelada por falta de matéria-prima."
+            );
+
             return false;
         }
 
-        double custoProducao = calcularCustoProducao(quantidadeSolicitada);
-
         if (custoProducao > budget) {
+            demanda.cancelar();
             System.out.printf(
-                    "Budget insuficiente. Custo da producao: R$ %.2f | Budget atual: R$ %.2f%n",
+                    "Budget insuficiente. Custo da produção: R$ %.2f | Budget atual: R$ %.2f%n",
                     custoProducao,
                     budget
             );
+            System.out.println("[AVISO] - Demanda cancelada por falta de orçamento.");
             return false;
         }
-        System.out.println("\n[AVISO] - Iniciando produção de "+ produtoModelo.getNome());
 
+        // Cada tentativa de produção recebe um lote próprio, mesmo que parte dos produtos seja rejeitada
+        int loteAtual = proximoLote++;
         int produtosAprovados = 0;
+
+        System.out.println("\n[AVISO] - Iniciando produção de " + produtoModelo.getNome());
+        System.out.println("Lote: " + loteAtual);
 
         for (int i = 0; i < quantidadeSolicitada; i++) {
             materiaPrima.consumir(produtoModelo.getQuantidadeMateriaPrimaPorUnidade());
 
             int numeroProduto = Produto.getTotalProdutosFabricados() + 1;
-
             Produto produto = criarProduto(produtoModelo, numeroProduto);
-
+            produto.aumentarProbabilidadeFalha(riscoInicialProduto);
+            produto.setLote(loteAtual);
             Produto.incrementarTotalProdutosFabricados();
 
             boolean aprovado = true;
 
             for (Maquina maquina : maquinas) {
-                if (maquina.quebrada()){
-                    maquina.contabilizarFalha();
+                // Se a máquina chegou a zero de saúde, ela precisa ser reparada antes de continuar o lote.
+                if (maquina.quebrada()) {
                     System.out.println("\n[AVISO] - Produção interrompida!");
-                    System.out.println("[AVISO] - A máquina "+ maquina.getNome()+
-                    " quebrou. O conserto já está a caminho");
+                    System.out.println("[AVISO] - A máquina " + maquina.getNome() + " está quebrada.");
                     maquina.reparar();
-                    System.out.println("[AVISO] - Máquina " + maquina.getNome() + " reparada com sucesso");
-                    System.out.println("[AVISO] - Produção retomada");
+                    System.out.println("[AVISO] - Máquina reparada. Produção retomada.");
                 }
+
                 budget -= maquina.getCustoOperacao();
                 if (!maquina.processar(produto)) {
                     aprovado = false;
@@ -187,30 +172,40 @@ public class GerenciadorProducao implements EstrategiaProducao{
                 produtosAprovados++;
             }
         }
-        demanda.atender(demanda);
+
         int produtosRejeitados = quantidadeSolicitada - produtosAprovados;
 
-        System.out.println("\n=== RESULTADO DA PRODUCAO ===");
-        System.out.println("Produtos produzidos: " + quantidadeSolicitada);
+        System.out.println("\n=== RESULTADO DA PRODUÇÃO ===");
+        System.out.println("Produtos processados: " + quantidadeSolicitada);
         System.out.println("Produtos aprovados: " + produtosAprovados);
         System.out.println("Produtos rejeitados: " + produtosRejeitados);
 
         if (produtosRejeitados == 0) {
-            demanda.atender(demanda);;
+            demanda.concluir();
             System.out.println("Demanda atendida completamente.");
             return true;
         }
 
-        // Os produtos rejeitados continuam pendentes na demanda
+        // A demanda volta para a fila somente com o que ainda ficou faltando produzir.
+        demanda.voltarParaPendente();
         demanda.atualizarQuantidade(produtosRejeitados);
+        demanda.setCustoTotal(calcularCustoProducao(produtosRejeitados));
 
         System.out.println(
                 "Ainda faltam "
                 + produtosRejeitados
                 + " produto(s) para atender a demanda."
         );
-
         return false;
+    }
+
+    private Produto buscarProdutoModelo(TipoProduto tipoProduto) {
+        for (Produto produto : produtosModelos) {
+            if (produto.getTipo() == tipoProduto) {
+                return produto;
+            }
+        }
+        return null;
     }
 
     private double calcularCustoProducao(int quantidadeProdutos) {
@@ -220,62 +215,124 @@ public class GerenciadorProducao implements EstrategiaProducao{
         }
         return custoPorProduto * quantidadeProdutos;
     }
-    public double getCustoproducao(int quantidadeProdutos){
+
+    public double getCustoProducao(int quantidadeProdutos) {
         return calcularCustoProducao(quantidadeProdutos);
     }
+
     private Produto criarProduto(Produto produtoModelo, int numeroProduto) {
         String id = produtoModelo.getId() + "-" + numeroProduto;
 
         if (produtoModelo instanceof ProdutoHidratante) {
-            return new ProdutoHidratante(
-                    id,
-                    produtoModelo.getNome(),
-                    produtoModelo.getQuantidadeMateriaPrimaPorUnidade()
-            );
+            return new ProdutoHidratante(id, produtoModelo.getNome(), produtoModelo.getQuantidadeMateriaPrimaPorUnidade());
         }
-
         if (produtoModelo instanceof ProdutoCremeDeMaos) {
-            return new ProdutoCremeDeMaos(
-                    id,
-                    produtoModelo.getNome(),
-                    produtoModelo.getQuantidadeMateriaPrimaPorUnidade()
-            );
+            return new ProdutoCremeDeMaos(id, produtoModelo.getNome(), produtoModelo.getQuantidadeMateriaPrimaPorUnidade());
+        }
+        return new ProdutoEsfoliante(id, produtoModelo.getNome(), produtoModelo.getQuantidadeMateriaPrimaPorUnidade());
+    }
+
+    public void gerarAuditoriaGeral() {
+        System.out.println("\n=== AUDITORIA GERAL ===");
+        ArrayList<Auditavel> itensAuditaveis = new ArrayList<>();
+        itensAuditaveis.addAll(maquinas);
+        itensAuditaveis.addAll(produtosFabricados);
+
+        if (itensAuditaveis.isEmpty()) {
+            System.out.println("Não existem itens para auditar.");
+            return;
         }
 
-        return new ProdutoEsfoliante(
-                id,
-                produtoModelo.getNome(),
-                produtoModelo.getQuantidadeMateriaPrimaPorUnidade()
-        );
+        // Como máquinas e produtos são Auditavel, o mesmo laço serve para os dois tipos de objeto.
+        for (Auditavel item : itensAuditaveis) {
+            System.out.println(item.gerarRelatorioDiagnostico());
+        }
+    }
+
+    public void detalharProdutos() {
+        System.out.println("\n[PRODUTOS]");
+        if (produtosFabricados.isEmpty()) {
+            System.out.println("Ainda não existem produtos acabados.");
+            return;
+        }
+
+        for (Produto produto : produtosFabricados) {
+            System.out.println(produto.gerarRelatorioDiagnostico());
+        }
+    }
+
+    public void detalharMaquinas() {
+        System.out.println("\n[MÁQUINAS]");
+        for (Maquina maquina : maquinas) {
+            System.out.println(
+                    maquina.gerarRelatorioDiagnostico()
+                    + " | Falha base: " + String.format("%.0f%%", maquina.getProbabilidadeFalha() * 100)
+            );
+        }
+    }
+
+    public void exibirArmazem() {
+        System.out.println("\n=== ARMAZÉM DE PRODUTOS ACABADOS ===");
+        if (produtosFabricados.isEmpty()) {
+            System.out.println("O armazém está vazio.");
+            return;
+        }
+
+        for (TipoProduto tipo : TipoProduto.values()) {
+            int quantidade = 0;
+            double somaQualidade = 0.0;
+
+            for (Produto produto : produtosFabricados) {
+                if (produto.getTipo() == tipo) {
+                    quantidade++;
+                    somaQualidade += produto.getQualidade();
+                }
+            }
+
+            if (quantidade > 0) {
+                System.out.printf(
+                        "%s | Quantidade: %d | Qualidade média: %.2f%n",
+                        tipo.getNome(),
+                        quantidade,
+                        somaQualidade / quantidade
+                );
+            }
+        }
+
+        System.out.println("\nDetalhes dos lotes:");
+        for (Produto produto : produtosFabricados) {
+            System.out.println(
+                    produto.getId() + " | " + produto.getNome()
+                    + " | Lote: " + produto.getLote()
+                    + " | Qualidade: " + produto.getQualidade()
+                    + " | Risco: " + (produto.precisaManutencao() ? "Atenção" : "Normal")
+            );
+        }
+    }
+
+    public void exibirDemandas() {
+        if (demandas.isEmpty()) {
+            System.out.println("Não existem demandas.");
+            return;
+        }
+
+        for (Demanda demanda : demandas) {
+            System.out.println(
+                    "Tipo: " + demanda.getTipoProduto().getNome()
+                    + " | Quantidade: " + demanda.getQuantidadeProdutos()
+                    + " | Status: " + demanda.getStatus().getDescricao()
+                    + " | Custo estimado: R$ " + String.format("%.2f", demanda.getCustoTotal())
+            );
+        }
+        System.out.println();
     }
 
     public void exibirBudget() {
         System.out.printf("Budget atual: R$ %.2f%n", budget);
     }
-    public void exibirEstrategiaAtual(){
-        System.out.println("Estratégia atual : " + estrategiaAtual.getNomeEstrategia());
-    }
-    
 
-    public void exibirArmazem() {
-        if (produtosFabricados.isEmpty()) {
-            System.out.println("O armazem esta vazio.");
-            return;
-        }
-
-        System.out.println(
-                "Total de produtos no armazem: "
-                + produtosFabricados.size()
-        );
-
-        for (Produto produto : produtosFabricados) {
-            System.out.println(
-                    produto.getId() + " - "
-                    + produto.getNome() + " - "
-                    + produto.getStatus() + " - Qualidade : "
-                    + produto.getQualidade()
-            );
-        }
+    public void exibirEstrategiaAtual() {
+        System.out.println("Estratégia atual: " + estrategiaAtual.getNomeEstrategia());
     }
 
     public double getBudget() {
@@ -293,17 +350,4 @@ public class GerenciadorProducao implements EstrategiaProducao{
     public ArrayList<Demanda> getDemandas() {
         return demandas;
     }
-    public void exibirDemandas(){
-        if (!demandas.isEmpty()){
-            for (Demanda demanda : demandas){
-                System.out.println(" Tipo : " + demanda.getTipoProduto().getNome() + " | Quantidade : " 
-                + demanda.getQuantidadeProdutos() + " | Status : " + demanda.getStatus().getNome());
-            }
-        }
-        else{
-            System.out.println("Não existem demandas");
-        }
-        System.out.println();
-    }
-    
 }

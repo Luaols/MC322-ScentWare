@@ -4,16 +4,6 @@ public class ProdutoEsfoliante extends Produto {
     }
 
     @Override
-    public boolean precisaManutencao(){
-        if (getProbabilidadeFalhaAcumulada() >= 1.0){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    @Override
     public void processar() {
         setStatus("Em processamento");
     }

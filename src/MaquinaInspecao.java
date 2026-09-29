@@ -18,14 +18,15 @@ public class MaquinaInspecao extends Maquina {
     public boolean processar(Produto produto) {
         ligar();
 
-        // A qualidade influencia diretamente a chance de rejeicao
-        // A probabilidade acumulada aumenta ainda mais essa chance
-        double chanceRejeicao = produto.getQualidade()
-                * (0.5 + 0.5 * produto.getProbabilidadeFalhaAcumulada());
+        // Quanto maior a qualidade, menor a chance básica de rejeição.
+        // Os problemas acumulados nas etapas anteriores aumentam essa chance.
+        double chanceRejeicao = (1.0 - produto.getQualidade())
+                + produto.getProbabilidadeFalhaAcumulada() * 0.5;
+        chanceRejeicao = Math.min(1.0, chanceRejeicao);
 
         boolean rejeitado = random.nextDouble() < chanceRejeicao;
 
-        // Se a propria maquina de inspecao falhar, o resultado da inspecao fica incorreto
+        // Se a própria inspeção falhar, consideramos que ela pode dar o resultado contrário.
         if (verificarFalha()) {
             rejeitado = !rejeitado;
         }

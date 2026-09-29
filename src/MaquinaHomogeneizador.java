@@ -15,7 +15,7 @@ public class MaquinaHomogeneizador extends Maquina {
         ligar();
         produto.processar();
 
-        // A falha do homogeinizador aumenta a probabilidade acumulada do produto.
+        // Uma falha aqui não rejeita o produto na hora, mas aumenta o risco levado até a inspeção.
         if (verificarFalha()) {
             produto.aumentarProbabilidadeFalha(getProbabilidadeFalha());
         }

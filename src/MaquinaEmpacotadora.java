@@ -14,7 +14,7 @@ public class MaquinaEmpacotadora extends Maquina {
     public boolean processar(Produto produto) {
         ligar();
 
-        // A falha da empacotadora aumenta a probabilidade acumulada do produto.
+        // Assim como no homogeneizador, uma falha aqui aumenta o risco que será avaliado na inspeção.
         if (verificarFalha()) {
             produto.aumentarProbabilidadeFalha(getProbabilidadeFalha());
         }

@@ -8,8 +8,7 @@ public abstract class Maquina implements Auditavel {
     private double custoOperacao;
     private double health;
     private double maximoDesgaste;
-    private static int falhas = 0;
-
+    private int falhas;
     private Random random = new Random();
 
     public Maquina(
@@ -27,43 +26,39 @@ public abstract class Maquina implements Auditavel {
         this.custoOperacao = custoOperacao;
         this.health = health;
         this.maximoDesgaste = maximoDesgaste;
+        this.falhas = 0;
     }
 
     public abstract boolean processar(Produto produto);
-
     public abstract String getTipo();
 
-    @Override 
-    public String gerarRelatorioDiagnostico(){
-        if (precisaManutencao()){
-        return(" | Saúde : " + health + "% | Número de falhas : " 
-        + falhas + " | Precisa de manutenção : Sim");
-        }
-        else{
-             return(" | Saúde : " + health + "% | Número de falhas : " 
-        + falhas + " | Precisa de manutenção : Não ");
-        }
+    @Override
+    public String gerarRelatorioDiagnostico() {
+        return String.format(
+                "%s (%s) | Saúde: %.1f%% | Falhas: %d | Precisa de manutenção: %s",
+                nome,
+                getTipo(),
+                health,
+                falhas,
+                precisaManutencao() ? "Sim" : "Não"
+        );
     }
-    @Override 
-    public boolean precisaManutencao(){
-        if (health < 30){
-            return true;
-        }
-        else {
-            return false;
-        }
+
+    @Override
+    public boolean precisaManutencao() {
+        return health < 30.0;
     }
-    public boolean quebrada(){
-        if (health <= 0){
-            return true;
-        }
-        return false;
+
+    public boolean quebrada() {
+        return health <= 0.0;
     }
-    public void contabilizarFalha(){
-        falhas += 1;
-    }    
-    public void reparar(){
-        health = 100;
+
+    public void contabilizarFalha() {
+        falhas++;
+    }
+
+    public void reparar() {
+        health = 100.0;
     }
 
     public void ligar() {
@@ -90,18 +85,31 @@ public abstract class Maquina implements Auditavel {
         return custoOperacao;
     }
 
-    protected double getProbabilidadeFalha() {
+    public double getHealth() {
+        return health;
+    }
+
+    public double getProbabilidadeFalha() {
         return probabilidadeFalha;
     }
 
-    // Verifica se a falha acontece de acordo com a probabilidade da maquina
+    // A chance começa no valor do cenário e cresce conforme a máquina vai se desgastando.
     protected boolean verificarFalha() {
-        return random.nextDouble() < probabilidadeFalha * (100 - health)/100.0;
+        double fatorDesgaste = 1.0 + (100.0 - health) / 100.0;
+        double chanceFalha = Math.min(1.0, probabilidadeFalha * fatorDesgaste);
+        boolean falhou = random.nextDouble() < chanceFalha;
+
+        if (falhou) {
+            contabilizarFalha();
+        }
+        return falhou;
     }
-    protected void desgasteAleatorio(){
-        health -= random.nextDouble() * maximoDesgaste ;
-        if (health < 0){
-            health = 0;
+
+    // O desgaste acontece a cada uso e é mais agressivo no cenário Apocalíptico.
+    protected void desgasteAleatorio() {
+        health -= random.nextDouble() * maximoDesgaste;
+        if (health < 0.0) {
+            health = 0.0;
         }
     }
 }
